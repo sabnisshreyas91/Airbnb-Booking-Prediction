@@ -69,15 +69,15 @@ best performing model.
 
 ### Icebox
 
-**1. Set up S3 instance**:
+* **Set up S3 instance**:
 This will be used to store the pickled model that will be used for making
 predictions on user-input data.
 
-**2. Initialize RDS database**:
+* **Initialize RDS database**:
 The RDS will be used to store cleansed training data in order to perform
 the initial training of the best performing model. The trained model will be
 pickled and stored in the S3 instance and used for all future predictions.
 
-**3. Deploy model using Flask**:
+* **Deploy model using Flask**:
 Write scripts to train the model using data stored in RDS, obtain user inputs
 to feed as model data inputs and display model output.
