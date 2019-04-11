@@ -39,9 +39,13 @@ actions w.r.t marketing campaigns and host acquisition. This will also enable
 Forecast travel destinations of the user-base to inform strategic 
 activities such as host acquisition, marketing campaigns and promotions.
 
-## Epics
+### Epics
 
 **Model Development**:
+Gain familiarity with the data, explore relationships between various
+user features and the likelihood of a user booking a stay at a specific country.
+Formulate modelling approaches, test and select best subset of features and the
+best performing model. 
 
 *Stories*:
 * Data Cleansing
@@ -51,3 +55,4 @@ activities such as host acquisition, marketing campaigns and promotions.
 * Model selection and parameter tuning
 * Model Evaluation
 * Model performance and Reproducibility tests
+
