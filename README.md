@@ -9,20 +9,22 @@
 
 ## Project Charter 
 
-**Vision**:  To predict which country a user will visit next, based on 
+### Vision  
+To predict which country a user will visit next, based on 
 demographics, web sessions and summary statistics.
 
-**Mission**:  To empower the business to predict travel trends of the user 
+## Mission
+ To empower the business to predict travel trends of the user 
 base to major destinations. This will allow execution of pro-active/remedial 
 actions w.r.t marketing campaigns and host acquisition. This will also enable
  formulation of deals and discounts for specific customers to further drive 
  up bookings.  
 
-**Success criteria**: 
+## Success criteria 
 
-*Model Criterion*: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the *Correct Classification Rate* exceeds 40%.
+**Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the *Correct Classification Rate* exceeds 40%.
 
- *Desired Business Outcomes*: If the model is successful, 
+**Desired Business Outcomes**: If the model is successful, 
  then *booking-conversion* rates should increase, as users who are on the 
  fence about a holiday will be hit with relevant deals and discounts 
  encouraging them to complete their bookings. 
@@ -33,3 +35,19 @@ actions w.r.t marketing campaigns and host acquisition. This will also enable
 
 ## Project Backlog 
 
+###Theme
+Forecast travel destinations of the user-base to inform strategic 
+activities such as host acquisition, marketing campaigns and promotions.
+
+##Epics
+
+**Model Development**:
+
+*Stories*:
+* Data Cleansing
+* Exploratory Data Analysis
+* Outlier detection and Management
+* Feature Engineering
+* Model selection and parameter tuning
+* Model Evaluation
+* Model performance and Reproducibility tests
