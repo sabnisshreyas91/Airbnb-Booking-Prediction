@@ -35,11 +35,11 @@ actions w.r.t marketing campaigns and host acquisition. This will also enable
 
 ## Project Backlog 
 
-###Theme
+### Theme
 Forecast travel destinations of the user-base to inform strategic 
 activities such as host acquisition, marketing campaigns and promotions.
 
-##Epics
+## Epics
 
 **Model Development**:
 
