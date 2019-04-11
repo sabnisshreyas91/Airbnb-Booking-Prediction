@@ -13,14 +13,14 @@
 To predict which country a user will visit next, based on 
 demographics, web sessions and summary statistics.
 
-## Mission
+### Mission
  To empower the business to predict travel trends of the user 
 base to major destinations. This will allow execution of pro-active/remedial 
 actions w.r.t marketing campaigns and host acquisition. This will also enable
  formulation of deals and discounts for specific customers to further drive 
  up bookings.  
 
-## Success criteria 
+### Success criteria 
 
 **Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the *Correct Classification Rate* exceeds 40%.
 
