@@ -34,7 +34,7 @@ actions w.r.t marketing campaigns and host acquisition. This will also enable
  with a high travel forecast.   
   
 
-## Project Backlog 
+## Planning
 
 ### Theme
 Forecast travel destinations of the user-base to inform strategic 
@@ -49,13 +49,23 @@ Formulate modelling approaches, test and select best subset of features and the
 best performing model. 
 
 *Stories*:-
-* Data Cleansing - 2pt 
-* Exploratory Data Analysis - 4pt
-* Outlier detection and Management - 2pt.
-* Feature Engineering - 8pt.
-* Model selection and parameter tuning - 8pt.
-* Model Evaluation - 2 pt.
-* Model performance and Reproducibility tests - 4 pt.
+* Data Cleansing  
+* Exploratory Data Analysis
+* Outlier detection and Management
+* Feature Engineering
+* Model selection and parameter tuning
+* Model Evaluation
+* Model performance and Reproducibility tests
+
+### Backlog
+
+1. *Model Development . Data Cleansing* (2) - PLANNED
+2. *Model Development . Exploratory Data Analysis* (4) - PLANNED
+3. *Model Development . Outlier detection and Management* (2) - PLANNED
+4. *Model Development . Feature Engineering* (8) - PLANNED
+5. *Model Development . Model selection and parameter tuning* (8)
+6. *Model Development . Model Evaluation* (2)
+7. *Model Development . Model performance and Reproducibility tests* (4)
 
 ### Icebox
 
