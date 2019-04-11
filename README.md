@@ -41,7 +41,7 @@ activities such as host acquisition, marketing campaigns and promotions.
 
 ### Epics
 
-**Model Development**:
+**1. Model Development**:
 Gain familiarity with the data, explore relationships between various
 user features and the likelihood of a user booking a stay at a specific country.
 Formulate modelling approaches, test and select best subset of features and the
@@ -56,3 +56,10 @@ best performing model.
 * Model Evaluation
 * Model performance and Reproducibility tests
 
+**2. Set up S3**
+This will be used to store the pickled model from Epic 3.
+
+**3. Initialize RDS database**:
+The RDS will be used to store cleansed training data in order to perform
+the initial training of the best performing model. The trained model will be
+pickled and stored in the S3 instance and used for all future predictions.
