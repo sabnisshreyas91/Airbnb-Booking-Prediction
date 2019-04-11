@@ -11,7 +11,8 @@
 
 ### Vision  
 To predict which country a user will visit next, based on 
-demographics, web sessions and summary statistics.
+demographics, web sessions and summary statistics on the users and countries
+interest.
 
 ### Mission
  To empower the business to predict travel trends of the user 
@@ -66,3 +67,7 @@ predictions on user-input data.
 The RDS will be used to store cleansed training data in order to perform
 the initial training of the best performing model. The trained model will be
 pickled and stored in the S3 instance and used for all future predictions.
+
+**3. Deploy model using Flask**:
+Write scripts to train the model using data stored in RDS, obtain user inputs
+to feed as model data inputs and display model output.
