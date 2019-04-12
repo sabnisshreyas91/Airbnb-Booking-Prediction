@@ -23,7 +23,7 @@ interest.
 
 ### Success criteria 
 
-**Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the *Correct Classification Rate* significantly exceeds 40%.
+**Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the Cross Validation *Correct Classification Rate* significantly exceeds 40%.
 
 **Desired Business Outcomes**: If the model is successful, 
  then *booking-conversion* rates should increase, as users who are on the 
@@ -49,7 +49,7 @@ Formulate modelling approaches, test and select best subset of features and the
 best performing model. 
 
 *Stories*:-
-* Data Cleansing  
+* Data Cleansing - addressing missing / incoherent / incorrect data
 * Exploratory Data Analysis
 * Outlier detection and Management
 * Feature Engineering
