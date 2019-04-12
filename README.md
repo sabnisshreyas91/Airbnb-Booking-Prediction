@@ -17,21 +17,18 @@ actions w.r.t marketing campaigns and host acquisition. This will also enable
  up bookings.  
 
 ### Mission
-To predict which country a user will visit next, based on 
+To predict which country a user will visit next, based on currently available data on 
 demographics, web sessions and summary statistics on the users and countries
-interest.
+interest. Note that the mission does not include a prediction of when the customer
+may make the next booking. This is because one of the business goals of 
+the project is to leverage the prediction of *where* the user travel to next in 
+order to influence *when* he me makes his next booking.
 
 ### Success criteria 
 
-**Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the Cross Validation *Correct Classification Rate* significantly exceeds 40%.
+**Model Criterion**: The classification outcome labels consist of 10 individual countries, 'other' minor countries and 'NDF' which signifies no booking was made. Nearly 60% of rows have 'NDF' as the outcome label. Therefore the model is successful if the Cross Validation *Correct Classification Rate* significantly exceeds 40%. In addition prediction *precision* for each output label must exceed 70%.
 
-**Desired Business Outcomes**: If the model is successful, 
- then *booking-conversion* rates should increase, as users who are on the 
- fence about a holiday will be hit with relevant deals and discounts 
- encouraging them to complete their bookings. 
- A long term indication of the models' success would be a simultaneous 
- increase in *Host Acquisition* as well as user trips to countries \
- with a high travel forecast.   
+**Desired Business Outcomes**: The first measure of project success would be the extent of traction and engagement it receives within the company, specifically by teams that are responsible for marketing/promotions and host acquisition. In the medium term, project success would be measured by an increase in booking-conversion rates, as users who are on the fence about a booking should be hit with relevant discounts/promotions that would encourage them to complete their booking. A long term indication of the models’ success would be a simultaneous increase in host acquisition, as well as user-bookings to countries with a high travel forecast.  
   
 
 ## Planning
@@ -81,3 +78,6 @@ pickled and stored in the S3 instance and used for all future predictions.
 * **Deploy model using Flask**:
 Write scripts to train the model using data stored in RDS, obtain user inputs
 to feed as model data inputs and display model output.
+
+* **User interface enhancement**:
+Add captivating images and other cosmetic elements to front-end.
