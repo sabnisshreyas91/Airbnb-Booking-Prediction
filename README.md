@@ -1,7 +1,7 @@
 # Airbnb Next Booking Prediction
 
 <!-- toc -->
-- [test](#https://github.com/sabnisshreyas91/Airbnb-Booking-Prediction)
+- [test](https://github.com/sabnisshreyas91/Airbnb-Booking-Prediction)
 - [Project Charter](#project-charter)
 - [Project Backlog](#project-backlog)
 
