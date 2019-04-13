@@ -1,7 +1,11 @@
 # Airbnb Next Booking Prediction
 
 <!-- toc -->
-- [test](https://github.com/sabnisshreyas91/Airbnb-Booking-Prediction)
+* Developer: [Shreyas Sabnis](https://github.com/sabnisshreyas91)
+* QA: [Carson Chen](https://github.com/carsonzchen)
+  
+___
+
 - [Project Charter](#project-charter)
 - [Project Backlog](#project-backlog)
 
