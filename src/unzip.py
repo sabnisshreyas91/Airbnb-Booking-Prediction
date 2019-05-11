@@ -1,5 +1,8 @@
 import zipfile
 import os
+import config
+
+config.DEBUG
 
 root = "D:\\Northwestern\\MSiA\\SQ 2019\\AVC\\Project\\Ideas\\Airbnb-Booking-Prediction\\"
 data = "\\data"
