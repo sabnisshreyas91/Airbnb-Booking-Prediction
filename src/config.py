@@ -11,6 +11,7 @@ PROJECT_HOME = path.dirname(path.dirname(path.abspath(__file__)))+"//"
 DATA_FOLDER = "data/"
 UNCOMPRESSED_DATA = "uncompressed_files/"
 ZIP_FILE_NAME = "AirBnb.zip"
+DATA_SOURCE_BUCKET_NAME = "nw-shreyassabnis-msia423-public"
 BUCKET_NAME = "nw-shreyassabnis-msia423"
 BUCKET_FOLDER = "Input2/"
 MYSQL_DB = 'msia423'
