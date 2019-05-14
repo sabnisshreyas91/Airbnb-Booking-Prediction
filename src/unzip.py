@@ -1,5 +1,6 @@
 import zipfile
 import os
+import shutil
 import config
 import logging.config
 from zipfile import BadZipfile
@@ -17,7 +18,14 @@ data_folder_path = root + data
 zip_file_path = data_folder_path+zip_file_name
 uncompressed_folder_path = data_folder_path+uncompressed_data
 
+
 zip_folder_name = str.replace(zip_file_name, ".zip", "")+"//"
+shutil.rmtree(uncompressed_folder_path+zip_folder_name, ignore_errors=True)
+
+for file in os.listdir(uncompressed_folder_path):
+    os.remove(os.path.join(uncompressed_folder_path, file))
+    logger.warning("Deleted file %s as it already exists in %s", file, uncompressed_folder_path)
+
 
 logger.info("Commence extract of  '%s'", zip_file_name)
 try:
