@@ -1,10 +1,11 @@
-import logging
+import logging.config
 from botocore.exceptions import ClientError
 import config
 import os
 
 import boto3
 
+logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 root = config.PROJECT_HOME
@@ -38,10 +39,14 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-file_lst = os.listdir(root+data+uncompressed_data)
-for file in file_lst:
-    fq_local_file_path = root+data+uncompressed_data+file
-    logger.debug("Uploading file %s", fq_local_file_path)
-    bucket_path = bucket_folder+file
-    upload_file(fq_local_file_path, bucket_name, bucket_path)
-    logger.debug("Uploaded file %s", fq_local_file_path)
+uncompressed_data_fq_path = root+data+uncompressed_data
+file_lst = os.listdir(uncompressed_data_fq_path)
+if len(file_lst) == 0:
+    logger.warning("No Input files present in directory '%s', aborting operation", uncompressed_data_fq_path)
+else:
+    for file in file_lst:
+        fq_local_file_path = root+data+uncompressed_data+file
+        logger.info("Uploading file %s", fq_local_file_path)
+        bucket_path = bucket_folder+file
+        upload_file(fq_local_file_path, bucket_name, bucket_path)
+        logger.info("Uploaded file %s", fq_local_file_path)
