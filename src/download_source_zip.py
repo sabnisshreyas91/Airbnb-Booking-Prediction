@@ -8,17 +8,22 @@ import boto3
 logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
+root = config.PROJECT_HOME
+data = config.DATA_FOLDER
 src_bucket_name = config.DATA_SOURCE_BUCKET_NAME
 root = config.PROJECT_HOME
 data = config.DATA_FOLDER
+zip_file_name = config.ZIP_FILE_NAME
+destination_path = root+data+zip_file_name
 
-s3 = boto3.resource('s3')
+s3 = boto3.client('s3')
 
 try:
-    #s3.Bucket(BUCKET_NAME).download_file(KEY, 'my_local_image.jpg')
-    s3.download_file(src_bucket_name, 'AirBnB.zip', 'AirBnB.zip')
+    logger.info("Downloading %s from bucket %s",zip_file_name,src_bucket_name)
+    s3.download_file(src_bucket_name, zip_file_name, root+data+zip_file_name)
+    logger.info("Downloaded %s from bucket %s to %s",zip_file_name,src_bucket_name,destination_path)
 except ClientError as e:
     if e.response['Error']['Code'] == "404":
-        print("The object does not exist.")
+        logger.warning("The object %s does not exist in AWS bucket %s.", zip_file_name, src_bucket_name)
     else:
         raise

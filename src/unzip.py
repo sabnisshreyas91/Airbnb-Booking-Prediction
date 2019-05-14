@@ -4,8 +4,6 @@ import config
 import logging.config
 from zipfile import BadZipfile
 
-#logger = logging.getLogger(__name__)
-
 logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
