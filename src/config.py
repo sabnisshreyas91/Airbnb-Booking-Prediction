@@ -3,7 +3,7 @@ from os import path
 DEBUG = False
 LOGGING_CONFIG = "config/logging/local.conf"
 PORT = 3000
-APP_NAME = "penny-lane"
+APP_NAME = "airbnb-booking-prediction"
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/tracks.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 HOST = "127.0.0.1"
@@ -13,3 +13,5 @@ UNCOMPRESSED_DATA = "uncompressed_files/"
 ZIP_FILE_NAME = "AirBnb.zip"
 BUCKET_NAME = "nw-shreyassabnis-msia423"
 BUCKET_FOLDER = "Input2/"
+MYSQL_DB = 'msia423'
+MYSQL_PORT = '3306'
