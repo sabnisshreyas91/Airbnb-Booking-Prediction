@@ -1,13 +1,19 @@
 import logging
-import boto3
 from botocore.exceptions import ClientError
+import config
 import os
 
-root = "D:\\Northwestern\\MSiA\\SQ 2019\\AVC\\Project\\Ideas\\Airbnb-Booking-Prediction\\"
-data = "\\data"
-uncompressed_data ="\\uncompressed_files"
-bucket_name = "nw-shreyassabnis-msia423"
-bucket_folder = "input2/"
+import boto3
+
+logger = logging.getLogger(__name__)
+
+root = config.PROJECT_HOME
+data = config.DATA_FOLDER
+uncompressed_data = config.UNCOMPRESSED_DATA
+bucket_name = config.BUCKET_NAME
+bucket_folder = config.BUCKET_FOLDER
+logger.debug("Finished imports and reading in configs")
+
 
 def upload_file(file_name, bucket, object_name=None):
     """Upload a file to an S3 bucket
@@ -34,16 +40,8 @@ def upload_file(file_name, bucket, object_name=None):
 
 file_lst = os.listdir(root+data+uncompressed_data)
 for file in file_lst:
-    local_path = root+data+uncompressed_data+"\\"+file
+    fq_local_file_path = root+data+uncompressed_data+file
+    logger.debug("Uploading file %s", fq_local_file_path)
     bucket_path = bucket_folder+file
-    if(file == "sessions.csv"):
-        continue
-    else:
-        #print(local_path,bucket_path)
-        #print("---")
-        print(file,'started')
-        upload_file(local_path,bucket_name,bucket_path)
-        print(file,'ended')
-    
-#upload_file("D:\\Northwestern\\MSiA\\SQ 2019\\AVC\\Project\\Ideas\\Airbnb-Booking-Prediction\\data\\uncompressed_files\\countries.csv","nw-shreyassabnis-msia423","input/countries.csv")
-#upload_file("D:\\Northwestern\\MSiA\\SQ 2019\\AVC\\Project\\Ideas\\Airbnb-Booking-Prediction\\data\\uncompressed_files\\countries.csv","nw-shreyassabnis-msia423","input/countries.csv")
+    upload_file(fq_local_file_path, bucket_name, bucket_path)
+    logger.debug("Uploaded file %s", fq_local_file_path)
