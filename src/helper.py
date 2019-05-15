@@ -131,20 +131,20 @@ def create_db(engine=None, engine_string=None):
         engine = sql.create_engine(engine_string)
 
 
-def create_schema():
+def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag):
     Base = declarative_base()
-    if config.RDS_FLAG == 'T':
+    if rds_flag == 'T':
         conn_type = "mysql+pymysql"
-        user = os.environ.get("MYSQL_USER")
-        password = os.environ.get("MYSQL_PASSWORD")
-        host = config.RDS_HOST
-        port = config.RDS_PORT
-        databasename = config.MYSQL_DB
+        # user = os.environ.get("MYSQL_USER")
+        # password = os.environ.get("MYSQL_PASSWORD")
+        # host = config.RDS_HOST
+        # port = config.RDS_PORT
+        # databasename = config.MYSQL_DB
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, databasename)
         engine = sql.create_engine(engine_string)
     else:
-        engine = sql.create_engine(config.SQLITE_DATABASE_URI)
-        create_db(engine_string=config.SQLITE_DATABASE_URI)
+        engine = sql.create_engine(sqlite_uri)
+        create_db(engine_string=sqlite_uri)
 
     class UserInput(Base):
         """Create a data model for the database to be set up for capturing songs """
