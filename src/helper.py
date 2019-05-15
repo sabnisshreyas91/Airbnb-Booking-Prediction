@@ -31,7 +31,7 @@ def download_source_zip(src_bucket_name, zip_file_name, destination_path):
     s3 = boto3.client('s3')
     try:
         logger.info("Downloading %s from bucket %s", zip_file_name, src_bucket_name)
-        s3.download_file(src_bucket_name, zip_file_name, root+data+zip_file_name)
+        s3.download_file(src_bucket_name, zip_file_name, destination_path)
         logger.info("Downloaded %s from bucket %s to %s", zip_file_name, src_bucket_name,destination_path)
     except ClientError as e:
         if e.response['Error']['Code'] == "404":
@@ -102,7 +102,7 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
     else:
         for file in file_lst:
             fq_local_file_path = uncompressed_folder_path+file
-            logger.info("Uploading file %s", fq_local_file_path)
+            logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
             bucket_path = bucket_folder+file
             upload_file(fq_local_file_path, bucket_name, bucket_path)
-            logger.info("Uploaded file %s", fq_local_file_path)
+            logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
