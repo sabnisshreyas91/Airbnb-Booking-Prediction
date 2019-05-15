@@ -13,32 +13,32 @@ To add a song to an already created database:
 
     `python run.py ingest --artist="Britney Spears" --title="Radar" --album="Circus"`
 """
-import argparse
 import logging.config
-logging.config.fileConfig("config/logging/local.conf")
-logger = logging.getLogger("run-penny-lane")
+import src.config as config
+# logging.config.fileConfig("config/logging/local.conf")
+logging.config.fileConfig(config.LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
 
-from src.add_songs import create_db, add_track
+from src.helper import download_source_zip, unzip_file, load_data_to_S3
+
+root = config.PROJECT_HOME
+data = config.DATA_FOLDER
+src_bucket_name = config.DATA_SOURCE_BUCKET_NAME
+root = config.PROJECT_HOME
+data = config.DATA_FOLDER
+uncompressed_data = config.UNCOMPRESSED_DATA
+zip_file_name = config.ZIP_FILE_NAME
+bucket_name = config.BUCKET_NAME
+bucket_folder = config.BUCKET_FOLDER
+logger.debug("Finished imports and reading in configs")
+
+destination_path = root+data+zip_file_name
+data_folder_path = root+data
+zip_file_path = data_folder_path+zip_file_name
+uncompressed_folder_path = data_folder_path+uncompressed_data
 
 
 if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description="Run components of the model source code")
-    subparsers = parser.add_subparsers()
-
-    # Sub-parser for creating a database
-    sb_create = subparsers.add_parser("create", description="Create database")
-    sb_create.add_argument("--artist", default="Britney Spears", help="Artist of song to be added")
-    sb_create.add_argument("--title", default="Radar", help="Title of song to be added")
-    sb_create.add_argument("--album", default="Circus", help="Album of song being added.")
-    sb_create.set_defaults(func=create_db)
-
-    # Sub-parser for ingesting new data
-    sb_ingest = subparsers.add_parser("ingest", description="Add data to database")
-    sb_ingest.add_argument("--artist", default="Emancipator", help="Artist of song to be added")
-    sb_ingest.add_argument("--title", default="Minor Cause", help="Title of song to be added")
-    sb_ingest.add_argument("--album", default="Dusk to Dawn", help="Album of song being added")
-    sb_ingest.set_defaults(func=add_track)
-
-    args = parser.parse_args()
-    args.func(args)
+    download_source_zip(src_bucket_name, zip_file_name, destination_path)
+    unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path, )
+    load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder)
