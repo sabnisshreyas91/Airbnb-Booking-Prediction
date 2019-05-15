@@ -15,24 +15,18 @@ from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
 
-# root = config.PROJECT_HOME
-# data = config.DATA_FOLDER
-# src_bucket_name = config.DATA_SOURCE_BUCKET_NAME
-# root = config.PROJECT_HOME
-# data = config.DATA_FOLDER
-# uncompressed_data = config.UNCOMPRESSED_DATA
-# zip_file_name = config.ZIP_FILE_NAME
-# bucket_name = config.BUCKET_NAME
-# bucket_folder = config.BUCKET_FOLDER
-# logger.debug("Finished imports and reading in configs")
-
-# destination_path = root+data+zip_file_name
-# data_folder_path = root+data
-# zip_file_path = data_folder_path+zip_file_name
-# uncompressed_folder_path = data_folder_path+uncompressed_data
-
 
 def download_source_zip(src_bucket_name, zip_file_name, destination_path):
+    """
+    Downloads compressed data from source public bucket (config.DATA_SOURCE_BUCKET_NAME)
+    to a folder in the local filesystem.
+    
+    :param src_bucket_name: Name of the source public bucket
+    :param zip_file_name: Name of the .zip file in the source bucket.
+    :param destination_path: Fully qualified path of folder where the .zip file will be extracted
+
+    :return: None
+    """
     s3 = boto3.client('s3')
     try:
         logger.info("Downloading %s from bucket %s", zip_file_name, src_bucket_name)
@@ -46,6 +40,15 @@ def download_source_zip(src_bucket_name, zip_file_name, destination_path):
 
 
 def unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path):
+    """
+    Unzips source file into destination folder
+    
+    :param uncompressed_folder_path: Destination folder to which the uncompressed files will be sent
+    :param zip_file_name: Name of the .zip file in the local filesystem
+    :param zip_file_path: Fully qualified path of folder where the .zip file resides.
+
+    :return: None
+    """
     zip_folder_name = str.replace(zip_file_name, ".zip", "")+"//"
     shutil.rmtree(uncompressed_folder_path+zip_folder_name, ignore_errors=True)
 
@@ -77,11 +80,13 @@ def unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path):
 
 
 def upload_file(file_name, bucket, object_name=None):
-    """Upload a file to an S3 bucket
+    """
+    Upload a file to an S3 bucket
 
     :param file_name: File to upload
     :param bucket: Bucket to upload to
     :param object_name: S3 object name. If not specified then file_name is used
+
     :return: True if file was uploaded, else False
     """
 
@@ -101,6 +106,15 @@ def upload_file(file_name, bucket, object_name=None):
 
 
 def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
+    """
+    Uploads extracted source data files to a specific folder in an S3 bucket
+    
+    :param uncompressed_folder_path: Location of unzipped files in local filesystem
+    :param bucket_name: Bucket to upload to
+    :param bucket_folder: Subfolder within S3 bucket to upload to
+
+    :return: None
+    """
     file_lst = os.listdir(uncompressed_folder_path)
     if len(file_lst) == 0:
         logger.warning("No Input files present in directory '%s', aborting operation", uncompressed_folder_path)
@@ -114,12 +128,12 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
 
 
 def create_db(engine=None, engine_string=None):
-    """Creates a database with the data models inherited from `Base` (Tweet and TweetScore).
+    """
+    Creates a database with the data models inherited from `Base` (Tweet and TweetScore).
 
-    Args:
-        engine (:py:class:`sqlalchemy.engine.Engine`, default None): SQLAlchemy connection engine.
-            If None, `engine_string` must be provided.
-        engine_string (`str`, default None): String defining SQLAlchemy connection URI in the form of
+    
+        :param engine: SQLAlchemy connection engine. If None, `engine_string` must be provided.
+        :param engine_string: String defining SQLAlchemy connection URI in the form of
             `dialect+driver://username:password@host:port/database`. If None, `engine` must be provided.
 
     Returns:
@@ -134,20 +148,17 @@ def create_db(engine=None, engine_string=None):
 def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag):
     Base = declarative_base()
     if rds_flag == 'T':
+        logger.info("generating schema for %s database in AWS RDS",databasename)
         conn_type = "mysql+pymysql"
-        # user = os.environ.get("MYSQL_USER")
-        # password = os.environ.get("MYSQL_PASSWORD")
-        # host = config.RDS_HOST
-        # port = config.RDS_PORT
-        # databasename = config.MYSQL_DB
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, databasename)
         engine = sql.create_engine(engine_string)
     else:
+        logger.info("generating schema for %s database in sqlite",databasename)
         engine = sql.create_engine(sqlite_uri)
         create_db(engine_string=sqlite_uri)
 
     class UserInput(Base):
-        """Create a data model for the database to be set up for capturing songs """
+        """Create a data model to store any user inputs to the app """
         __tablename__ = 'User_Input'
         id = Column(Integer, primary_key=True)
         age = Column(Integer, unique=False, nullable=False)

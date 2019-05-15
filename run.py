@@ -31,6 +31,7 @@ password = os.environ.get("MYSQL_PASSWORD")
 host = config.RDS_HOST
 port = config.RDS_PORT
 databasename = config.MYSQL_DB
+# Indicator to decide if RDBMS schema should be created in local sqlite vs AWS RDS
 rds_flag = config.RDS_FLAG
 sqlite_uri = config.SQLITE_DATABASE_URI
 logger.debug("Finished imports and reading in configs")
@@ -38,7 +39,9 @@ logger.debug("Finished imports and reading in configs")
 
 destination_path = root+data+zip_file_name
 data_folder_path = root+data
+# The folder to which the source .zip file from the public source bucket will be downloaded to
 zip_file_path = data_folder_path+zip_file_name
+# Location where the zip files will be extracted to
 uncompressed_folder_path = data_folder_path+uncompressed_data
 
 
