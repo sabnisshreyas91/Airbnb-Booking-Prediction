@@ -19,7 +19,7 @@ import src.config as config
 logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
-from src.helper import download_source_zip, unzip_file, load_data_to_S3
+from src.helper import download_source_zip, unzip_file, load_data_to_S3, create_schema
 
 root = config.PROJECT_HOME
 data = config.DATA_FOLDER
@@ -42,3 +42,4 @@ if __name__ == '__main__':
     download_source_zip(src_bucket_name, zip_file_name, destination_path)
     unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path, )
     load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder)
+    create_schema()
