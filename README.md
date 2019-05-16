@@ -8,6 +8,11 @@ ___
 
 - [Project Charter](#project-charter)
 - [Project Backlog](#project-backlog)
+- [Running the application](#running-the-application)
+
+    * [1) Set up the environment](#1-set-up-the-environment)
+    * [2) Set up configurations](#2-set-up-configurations)
+    * [3) Upload data and setup database schema](#3-upload-data-and-setup-database-schema)
 
 <!-- tocstop -->
 
@@ -85,3 +90,70 @@ to feed as model data inputs and display model output.
 
 * **User interface enhancement**:
 Add captivating images and other cosmetic elements to front-end.
+
+
+## Running the application
+
+### 1. Set up environment 
+
+The `requirements.txt` file contains the packages required to run the model code. An environment can be set up in two ways. See bottom of README for exploratory data analysis environment setup. 
+
+#### With `virtualenv`
+
+```bash
+pip install virtualenv
+
+virtualenv airbnbbookingprediction
+
+source airbnbbookingprediction/bin/activate
+
+pip install -r requirements.txt
+
+```
+#### With `conda`
+
+```bash
+conda create -n airbnbbookingprediction python=3.7
+conda activate airbnbbookingprediction
+pip install -r requirements.txt
+
+```
+### 2. Set up configurations
+Currently, the app performs the following:
+
+1) Extracts data from source and uploads to an S3 bucket of choice (as configured in src/config.py)
+2) Creates database schema in either local sqlite server or AWS RDS server (again, both as configured in src/config.py)
+
+#### i) To set up in local sqlite database 
+Update src/config.py and set RDS_FLAG = 'F'
+ 
+ OR
+
+#### ii)To set up in AWS RDS
+- Update src/config.py as set RDS_FLAG = 'T'
+- Setup evironment variables
+    - Update config/.mysqlconfig and update environment variables MYSQL_USER and MYSQL_PASSWORD as per the AWS RDS instance setup
+    - Add the above environments to your bash profile by running:
+    ```bash
+    echo 'source ~/confg/.mysqlconfig' >> ~/.bash_profile
+    source ~/.bash_profile
+    ```
+Once step i) or ii) have been completed, verify the below configurations are setup in src/config.py :
+
+- BUCKET_NAME -> The name of your destination AWS S3 bucket. 
+
+(Note: The project requires *aws configure* to be run and the files ~/.aws/config and ~/.aws/credentials to exist so boto3 can identify them)
+
+- BUCKET_FOLDER -> The name of the input folder within your S3 bucket where you wish to upload the data
+
+- RDS_HOST -> The endpoint of your RDS instance
+
+- RDS_PORT -> The port number associated with your RDS instance
+
+### 3) Upload data and setup database schema
+`python run.py`
+
+This command will, as described above:
+
+1) Upload the source data to your target S3 bucket
+2) Setup the database schema either in local sqlite or AWS RDS
