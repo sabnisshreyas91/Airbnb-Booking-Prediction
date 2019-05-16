@@ -157,3 +157,5 @@ This command will, as described above:
 
 1) Upload the source data to your target S3 bucket
 2) Setup the database schema either in local sqlite or AWS RDS
+
+(For midproject PR)
