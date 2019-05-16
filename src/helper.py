@@ -120,11 +120,14 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
         logger.warning("No Input files present in directory '%s', aborting operation", uncompressed_folder_path)
     else:
         for file in file_lst:
-            fq_local_file_path = uncompressed_folder_path+file
-            logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
-            bucket_path = bucket_folder+file
-            upload_file(fq_local_file_path, bucket_name, bucket_path)
-            logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
+            if file == 'sessions.csv':
+                continue
+            else:
+                fq_local_file_path = uncompressed_folder_path+file
+                logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
+                bucket_path = bucket_folder+file
+                upload_file(fq_local_file_path, bucket_name, bucket_path)
+                logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
 
 
 def create_db(engine=None, engine_string=None):
