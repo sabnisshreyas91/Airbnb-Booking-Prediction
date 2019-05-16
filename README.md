@@ -135,7 +135,7 @@ Update src/config.py and set RDS_FLAG = 'F'
     - Update config/.mysqlconfig and update environment variables MYSQL_USER and MYSQL_PASSWORD as per the AWS RDS instance setup
     - Add the above environments to your bash profile by running:
     ```bash
-    echo 'source ~/confg/.mysqlconfig' >> ~/.bash_profile
+    echo '~/Airbnb-Booking-Prediction/config/.mysqlconfig' >> ~/.bash_profile
     source ~/.bash_profile
     ```
 Once step i) or ii) have been completed, verify the below configurations are setup in src/config.py :
