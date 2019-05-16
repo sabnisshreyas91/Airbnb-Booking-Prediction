@@ -47,6 +47,6 @@ uncompressed_folder_path = data_folder_path+uncompressed_data
 
 if __name__ == '__main__':
     download_source_zip(src_bucket_name, zip_file_name, destination_path)
-    unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path, )
+    unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path )
     load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder)
     create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag)

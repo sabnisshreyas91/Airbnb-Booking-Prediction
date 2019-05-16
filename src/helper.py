@@ -50,7 +50,12 @@ def unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path):
     :return: None
     """
     zip_folder_name = str.replace(zip_file_name, ".zip", "")+"//"
+    # Deletes airbnb/ folder if it exists inside the uncompressed folder, this can happen due to an interrupted run
     shutil.rmtree(uncompressed_folder_path+zip_folder_name, ignore_errors=True)
+
+    # Create uncompressed/ folder if it does not exist
+    if(os.path.exists(uncompressed_folder_path) == False):
+        os.mkdir(uncompressed_folder_path)
 
     for file in os.listdir(uncompressed_folder_path):
         os.remove(os.path.join(uncompressed_folder_path, file))
