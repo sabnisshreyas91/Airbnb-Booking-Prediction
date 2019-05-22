@@ -124,7 +124,7 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
     if len(file_lst) == 0:
         logger.warning("No Input files present in directory '%s', aborting operation", uncompressed_folder_path)
     else:
-        logger.info("Uploading to destination bucket %s",bucket_name)
+        logger.info("\nUploading to destination bucket %s\n",bucket_name)
         for file in file_lst:
             if file == 'sessions.csv':
                 continue
@@ -169,12 +169,12 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
     """
     Base = declarative_base()
     if rds_flag == 'T':
-        logger.info("generating schema for '%s' database in AWS RDS", databasename)
+        logger.info("\ngenerating schema for '%s' database in AWS RDS\n", databasename)
         conn_type = "mysql+pymysql"
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, databasename)
         engine = sql.create_engine(engine_string)
     else:
-        logger.info("generating schema for '%s' database in sqlite",databasename)
+        logger.info("\ngenerating schema for '%s' database in sqlite\n",databasename)
         engine = sql.create_engine(sqlite_uri)
         create_db(engine_string=sqlite_uri)
 
