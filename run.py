@@ -24,8 +24,8 @@ root = config.PROJECT_HOME
 data = config.DATA_FOLDER
 uncompressed_data = config.UNCOMPRESSED_DATA
 zip_file_name = config.ZIP_FILE_NAME
-bucket_name = config.BUCKET_NAME
-bucket_folder = config.BUCKET_FOLDER
+bucket_name = config.DEFAULT_BUCKET_NAME
+bucket_folder = config.DEFAULT_BUCKET_FOLDER
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--bucket_name", default= bucket_name, help="S3 bucket to upload the source data to. Default:nw-shreyassabnis-msia423")
