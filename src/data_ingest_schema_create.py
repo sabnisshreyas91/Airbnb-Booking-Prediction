@@ -169,7 +169,7 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
     """
     Base = declarative_base()
     if rds_flag == 'T':
-        logger.info("generating schema for %s database in AWS RDS", databasename)
+        logger.info("generating schema for '%s' database in AWS RDS", databasename)
         conn_type = "mysql+pymysql"
         engine_string = "{}://{}:{}@{}:{}/{}".format(conn_type, user, password, host, port, databasename)
         engine = sql.create_engine(engine_string)
