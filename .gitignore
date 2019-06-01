@@ -23,6 +23,7 @@ test/test/*
 # ipython notebooks
 #*.ipynb
 .ipynb_checkpoints/
+notebooks/develop/*
 
 # C extensions
 *.so
