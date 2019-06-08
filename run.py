@@ -11,7 +11,8 @@ import logging.config
 import src.config as config
 import os
 import argparse
-
+#from app.app import app
+#logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ bucket_folder = config.DEFAULT_BUCKET_FOLDER
 parser = argparse.ArgumentParser()
 parser.add_argument("--bucket_name", default= bucket_name, help="S3 bucket to upload the source data to. Default:nw-shreyassabnis-msia423")
 parser.add_argument("--bucket_folder", default= bucket_folder, help="Folder within S3 bucket where wd'd like the data to be uploaded. Default:Input/")
+#parser.add_argument("--app", default= 'F', help="Folder within S3 bucket where wd'd like the data to be uploaded. Default:Input/")
 args = parser.parse_args()
 
 user = os.environ.get("MYSQL_USER")
@@ -56,3 +58,6 @@ if __name__ == '__main__':
     unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path )
     load_data_to_S3(uncompressed_folder_path, args.bucket_name, args.bucket_folder)
     create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag)
+    # if(args.app == 'T'):
+    #     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
+
