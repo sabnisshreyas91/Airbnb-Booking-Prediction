@@ -1,8 +1,10 @@
+import numpy as np
 import datetime
 import pandas as pd
 import boto3
 from botocore.exceptions import ClientError
-
+from io import StringIO
+import boto3
 
 class Timer:
     """Times the code within the with statement and logs the elapsed time when it closes.
@@ -59,3 +61,14 @@ def read_csv_from_s3(bucket_name, bucket_folder, file_name):
     obj = client.get_object(Bucket=bucket_name, Key=bucket_folder+file_name)
     df = pd.read_csv(obj['Body'])
     return df
+
+
+def write_csv_to_s3(df, bucket_name, bucket_folder, file_name, arr=False):
+    csv_buffer = StringIO()
+    if(arr == False):
+        df.to_csv(csv_buffer, index=False)
+    else:
+        np.savetxt(csv_buffer, df , delimiter=",")
+    s3_resource = boto3.resource('s3')
+    fq_feature_fname = bucket_folder+file_name
+    s3_resource.Object(bucket_name, fq_feature_fname).put(Body=csv_buffer.getvalue())
