@@ -10,7 +10,7 @@ from zipfile import BadZipfile
 import sqlalchemy as sql
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy import Column, Integer, String, MetaData, Date
 from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
@@ -182,9 +182,11 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
         """Create a data model to store any user inputs to the app """
         __tablename__ = 'User_Input'
         id = Column(Integer, primary_key=True)
-        age = Column(Integer, unique=False, nullable=False)
+        Age = Column(Integer, unique=False, nullable=False)
         Gender = Column(String(100), unique=False, nullable=False)
-        Preffered_Destination = Column(String(100), unique=False, nullable=True)
+        SignupMethod = Column(String(100), unique=False, nullable=False)
+        Language = Column(String(100), unique=False, nullable=False)
+        DateAccountCreated = Column(Date, unique=False, nullable=False)
 
     def __repr__(self):
         return '<UserInput %r>' % self.title

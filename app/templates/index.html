@@ -7,34 +7,40 @@
 
 <body>
     <h3>
-         <a href = "{{ url_for('index') }}">Penny Lane Music Recommender</a>
+         <a href = "{{ url_for('index') }}">AirBnB next booking prediction</a>
     </h3>
 
     <hr/>
     <table>
          <thead>
             <tr>
-               <th>Title</th>
-               <th>Artist</th>
-               <th>Album</th>
+               <th>Age</th>
+               <th>Gender</th>
+               <th>Sign-Up Method</th>
+               <th>Language</th>
+               <th>Date Account Created</th>
             </tr>
          </thead>
 
          <tbody>
-            {% for track in tracks %}
+            {% for user in users %}
                <tr>
-                   <td>{{ track.title }}</td>
-                   <td>{{ track.artist }}</td>
-                   <td>{{ track.album }}</td>
+                   <td>{{ user.age }}</td>
+                   <td>{{ user.gender }}</td>
+                   <td>{{ user.signupmethod }}</td>
+                   <td>{{ user.language }}</td>
+                   <td>{{ user.dateaccountcreated }}</td>
                </tr>
             {% endfor %}
          </tbody>
       </table>
       <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
       <dl>
-        <input type=text size=15 name=title placeholder="Title">
-        <input type=text size=15 name=artist placeholder="Artist">
-        <input type=text size=15 name=album placeholder="Album">
+        <input type=text size=15 name=age placeholder="Age">
+        <input type=text size=15 name=gender placeholder="Gender">
+        <input type=text size=15 name=signupmethod placeholder="Sign-Up Method">
+        <input type=text size=15 name=language placeholder="Language">
+        <input type=text size=15 name=dateaccountcreated placeholder="Date Account Created">
         <input type=submit value=Add>
       </dl>
     </form>

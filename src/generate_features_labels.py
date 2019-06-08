@@ -12,7 +12,6 @@ import boto3
 log_file_path = "../"+config.LOGGING_CONFIG
 logging.config.fileConfig(log_file_path)
 
-#logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 bucket_name = config.DEFAULT_BUCKET_NAME
