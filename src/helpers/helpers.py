@@ -1,4 +1,7 @@
 import datetime
+import pandas as pd
+import boto3
+from botocore.exceptions import ClientError
 
 
 class Timer:
@@ -49,3 +52,10 @@ def format_sql(sql, replace_sqlvar=None, replace_var=None, python=True):
         sql = sql.replace("%", "%%")
 
     return sql
+
+
+def read_csv_from_s3(bucket_name, bucket_folder, file_name):
+    client = boto3.client('s3')
+    obj = client.get_object(Bucket=bucket_name, Key=bucket_folder+file_name)
+    df = pd.read_csv(obj['Body'])
+    return df
