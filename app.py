@@ -83,7 +83,6 @@ def index():
         y_pred_names = []
         for i in range(len(prediction)):
             y_pred_names.append(list(le.inverse_transform(np.argsort(prediction[i])[::-1])[:2]))
-        print(y_pred_names)
         pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
 
         return flask.render_template('index.html',
@@ -96,4 +95,4 @@ def index():
                                         )
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host = app.config['HOST'],port=app.config['PORT'],debug=app.config['DEBUG'])
