@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+form {
+    margin: auto;
+    width: 35%;
+}
+.result {
+    margin: auto;
+    width: 35%;
+    border: 1px solid #ccc;
+}
+</style>
 <head>
     <meta charset="UTF-8">
     <link href="static/basic.css" rel="stylesheet">
@@ -11,39 +22,24 @@
     </h3>
 
     <hr/>
-    <table>
-         <thead>
-            <tr>
-               <th>Age</th>
-               <th>Gender</th>
-               <th>Sign-Up Method</th>
-               <th>Language</th>
-               <th>Date Account Created</th>
-            </tr>
-         </thead>
-
-         <tbody>
-            {% for user in users %}
-               <tr>
-                   <td>{{ user.age }}</td>
-                   <td>{{ user.gender }}</td>
-                   <td>{{ user.signupmethod }}</td>
-                   <td>{{ user.language }}</td>
-                   <td>{{ user.dateaccountcreated }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
-      <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-      <dl>
-        <input type=text size=15 name=age placeholder="Age">
-        <input type=text size=15 name=gender placeholder="Gender">
-        <input type=text size=15 name=signupmethod placeholder="Sign-Up Method">
-        <input type=text size=15 name=language placeholder="Language">
-        <input type=text size=15 name=dateaccountcreated placeholder="Date Account Created">
-        <input type=submit value=Add>
-      </dl>
-    </form>
-
+    <form action="{{ url_for('index') }}" method="POST">
+    <fieldset>
+        <legend>Member details:</legend>
+        Gender:
+        <input name="gender" type="text" required>
+        <br>
+        <br> SignupMethod:
+        <input name="signupmethod" type="text" required>
+        <br>
+        <br> Language:
+        <input name="language" type="text" required>
+        <br>
+        <br> AffiliateChannel:
+        <input name="affiliatechannel" type="text" required>
+        <br>
+        <br>
+        <input type="submit">
+    </fieldset>
+</form>
 </body>
 </html>

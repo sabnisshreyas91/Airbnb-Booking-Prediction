@@ -9,7 +9,7 @@ from helpers.helpers import read_csv_from_s3, write_csv_to_s3
 from io import StringIO
 import boto3
 
-log_file_path = "../"+config.LOGGING_CONFIG
+log_file_path = config.LOGGING_CONFIG #"../"+config.LOGGING_CONFIG
 logging.config.fileConfig(log_file_path)
 
 logger = logging.getLogger(__name__)
@@ -73,8 +73,19 @@ logger.info("Obtained dummy categorical features")
 final_df = train_dummy.merge(df_sess_features, left_index=True, right_index=True, how='inner')
 logger.info("Combined to get final_df")
 
+user_inp_col_lst = config.USER_INPUT_COLUMNS
+col_lst = []
+for user_inp_col in user_inp_col_lst:
+    col_lst +=[col for col in list(final_df) if str(col).startswith(user_inp_col)]
+
+final_df_mode = final_df.mode()
+final_df_mode.loc[0,col_lst] = 0
+
 write_csv_to_s3(final_df, args.bucket_name, config.FEATURE_FOLDER, config.FEATURE_FILE_NAME)
 logger.info("wrote features to %s", config.FEATURE_FOLDER + config.FEATURE_FILE_NAME)
 
 write_csv_to_s3(df_labels, args.bucket_name, config.FEATURE_FOLDER, config.LABEL_FILE_NAME)
 logger.info("wrote labels to %s", config.FEATURE_FOLDER + config.LABEL_FILE_NAME)
+
+write_csv_to_s3(final_df_mode, args.bucket_name, config.FEATURE_FOLDER, config.MODE_FEATURES_FILE_NAME)
+logger.info("wrote mode_df to %s", config.FEATURE_FOLDER + config.MODE_FEATURES_FILE_NAME)

@@ -1,15 +1,34 @@
+import traceback
 from flask import render_template, request, redirect, url_for
 import logging.config
-from app import db, app
-from app.models import Track
+import src.config as config
+# from app.models import Tracks
+from flask import Flask
+import pickle
+import boto3
+import argparse
+from io import BytesIO
+import pandas as pd
 
-# Define LOGGING_CONFIG in config.py - path to config file for setting up the logger (e.g. config/logging/local.conf)
-logging.config.fileConfig(app.config["LOGGING_CONFIG"])
-logger = logging.getLogger("penny-lane")
-logger.debug('Test log')
+# Initialize the Flask application
+app = Flask(__name__,template_folder='app/templates/')
 
+logger = logging.getLogger(__name__)
 
-@app.route('/')
+import flask
+# Use pickle to load in the pre-trained model.
+
+s3 = boto3.resource('s3')
+parser = argparse.ArgumentParser()
+parser.add_argument("--bucket_name", default= config.DEFAULT_BUCKET_NAME, help="S3 bucket to upload the source data to. Default:nw-shreyassabnis-msia423")
+args = parser.parse_args()
+
+with BytesIO() as data:
+    s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
+    data.seek(0)    # move back to the beginning after writing
+    model = pickle.load(data)
+
+@app.route('/', methods=['GET','POST'])
 def index():
     """Main view that lists songs in the database.
 
@@ -19,33 +38,18 @@ def index():
     Returns: rendered html template
 
     """
-
-    try:
-        tracks = Track.query.all()
-        logger.debug("Index page accessed")
-        return render_template('index.html', tracks=tracks)
-    except:
-        logger.warning("Not able to display tracks, error page returned")
-        return render_template('error.html')
-
-
-@app.route('/add', methods=['POST'])
-def add_entry():
-    """View that process a POST with new song input
-
-    :return: redirect to index page
-    """
-
-    try:
-        track1 = Track(artist=request.form['artist'], album=request.form['album'], title=request.form['title'])
-        db.session.add(track1)
-        db.session.commit()
-        logger.info("New song added: %s by %s", request.form['title'], request.form['artist'])
-        return redirect(url_for('index'))
-    except:
-        logger.warning("Not able to display tracks, error page returned")
-        return render_template('error.html')
+    if flask.request.method == 'GET':
+        return(flask.render_template('index.html'))
+    if flask.request.method == 'POST':
+        gender = flask.request.form['gender']
+        signupmethod = flask.request.form['signupmethod']
+        language = flask.request.form['language']
+        affiliatechannel = flask.request.form['affiliatechannel']
+        input_variables = pd.DataFrame([[gender,age,signupmethod,language,affiliatechannel]],
+                                       columns=['gender','age','signupmethod','language','affiliatechannel'],
+                                       dtype=float)
+        print(input_variables)
 
 
-if __name__ == "__main__":
-    app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
+if __name__ == '__main__':
+    app.run()

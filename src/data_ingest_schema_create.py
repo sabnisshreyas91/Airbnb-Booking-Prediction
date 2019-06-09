@@ -22,11 +22,10 @@ class UserInput(Base):
     """Create a data model to store any user inputs to the app """
     __tablename__ = 'User_Input'
     id = Column(Integer, primary_key=True)
-    Age = Column(Integer, unique=False, nullable=False)
     Gender = Column(String(100), unique=False, nullable=False)
     SignupMethod = Column(String(100), unique=False, nullable=False)
     Language = Column(String(100), unique=False, nullable=False)
-    DateAccountCreated = Column(Date, unique=False, nullable=False)
+    AffiliateChannel = Column(String(100), unique=False, nullable=False)
 
 
 def __repr__(self):
