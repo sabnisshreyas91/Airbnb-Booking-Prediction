@@ -1,5 +1,6 @@
 import traceback
 from flask import render_template, request, redirect, url_for
+import flask
 import logging.config
 import src.config as config
 from src.helpers.helpers import read_csv_from_s3, read_array_from_s3
@@ -12,19 +13,24 @@ from io import BytesIO
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
+from flask_sqlalchemy import SQLAlchemy
 
 # Initialize the Flask application
 app = Flask(__name__,template_folder='app/templates/')
 
 logger = logging.getLogger(__name__)
-
-import flask
 # Use pickle to load in the pre-trained model.
 
 s3 = boto3.resource('s3')
 parser = argparse.ArgumentParser()
 parser.add_argument("--bucket_name", default= config.DEFAULT_BUCKET_NAME, help="S3 bucket to upload the source data to. Default:nw-shreyassabnis-msia423")
 args = parser.parse_args()
+
+df_train = read_csv_from_s3(args.bucket_name, config.DEFAULT_BUCKET_FOLDER, config.TRAIN_DATA)
+genders = list(df_train.gender.unique())
+signup_methods = list(df_train.signup_method.unique())
+languages = list(df_train.language.unique())
+affiliate_channels = list(df_train.affiliate_channel.unique())
 
 with BytesIO() as data:
     s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
@@ -42,13 +48,14 @@ def index():
 
     """
     if flask.request.method == 'GET':
-        return(flask.render_template('index.html'))
+        return(flask.render_template('index.html', genders = genders, signup_methods = signup_methods, languages = languages, affiliate_channels = affiliate_channels ))
     if flask.request.method == 'POST':
 
         gender_resp = flask.request.form['gender']
         signupmethod_resp = flask.request.form['signupmethod']
         language_resp = flask.request.form['language']
         affiliatechannel_resp = flask.request.form['affiliatechannel']
+        
 
         gender = 'gender_'+gender_resp
         signupmethod = 'signup_method_'+signupmethod_resp
@@ -83,7 +90,7 @@ def index():
                                                         'language':language_resp,
                                                         'affiliatechannel':affiliatechannel_resp
                                                         },
-                                        result=pred_val
+                                        result=pred_val, genders = genders, signup_method = signupmethod, languages = languages, affiliate_channels = affiliate_channels 
                                         )
 
 if __name__ == '__main__':

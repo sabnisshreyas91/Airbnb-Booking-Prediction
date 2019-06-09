@@ -25,17 +25,33 @@ form {
     <form action="{{ url_for('index') }}" method="POST">
     <fieldset>
         <legend>Member details:</legend>
-        Gender:
-        <input name="gender" type="text" required>
+        <br> Gender:
+        <select name='gender'>
+            {% for gender in genders %}
+            <option value="{{gender}}">{{gender}}</option>
+            {% endfor %}
+        </select>
         <br>
         <br> SignupMethod:
-        <input name="signupmethod" type="text" required>
+        <select name='signupmethod'>
+            {% for signupmethod in signup_methods %}
+            <option value="{{signupmethod}}">{{signupmethod}}</option>
+            {% endfor %}
+        </select>
         <br>
         <br> Language:
-        <input name="language" type="text" required>
+        <select name='language'>
+            {% for language in languages %}
+            <option value="{{language}}">{{language}}</option>
+            {% endfor %}
+        </select>
         <br>
         <br> AffiliateChannel:
-        <input name="affiliatechannel" type="text" required>
+        <select name='affiliatechannel'>
+            {% for affiliate_channel in affiliate_channels %}
+            <option value="{{affiliate_channel}}">{{affiliate_channel}}</option>
+            {% endfor %}
+        </select>
         <br>
         <br>
         <input type="submit">
