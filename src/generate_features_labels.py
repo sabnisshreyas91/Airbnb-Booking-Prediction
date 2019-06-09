@@ -81,6 +81,8 @@ for user_inp_col in user_inp_col_lst:
 final_df_mode = final_df.mode()
 final_df_mode.loc[0,col_lst] = 0
 
+final_df['userid'] = final_df.index
+
 write_csv_to_s3(final_df, args.bucket_name, config.FEATURE_FOLDER, config.FEATURE_FILE_NAME)
 logger.info("wrote features to %s", config.FEATURE_FOLDER + config.FEATURE_FILE_NAME)
 

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+form {
+    margin: auto;
+    width: 35%;
+}
+.result {
+    margin: auto;
+    width: 35%;
+    border: 1px solid #ccc;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <link href="static/basic.css" rel="stylesheet">
+</head>
+
+<body>
+    <h3>
+         <a href = "{{ url_for('index') }}">AirBnB next booking prediction - existing user</a>
+         <br>
+         <br>
+         <br>
+         <a href = "{{ url_for('userid') }}">AirBnB next booking prediction - new user</a>
+    </h3>
+
+    <hr/>
+    <form action="{{ url_for('userid') }}" method="POST">
+    <fieldset>
+        <legend>User id:</legend>
+        <input name="userid" type="text" required>
+        <br>
+        </select>
+        <br>
+        <br>
+        <input type="submit">
+    </fieldset>
+</form>
+<br>
+<div class="result" align="center">
+    {% if result %}
+        {% for variable, value in original_input.items() %}
+            <b>{{ variable }}</b> : {{ value }} <br>
+        {% endfor %}
+        <br>
+        <br> Top 2 predicted foreign destinations for user:
+           <p style="font-size:50px">{{ result }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -30,7 +30,7 @@ args = parser.parse_args()
 
 feature_df = read_csv_from_s3(args.bucket_name, args.bucket_folder, features)
 label_df = read_csv_from_s3(args.bucket_name, args.bucket_folder, labels)
-
+feature_df = feature_df.drop('userid',axis=1)
 X = feature_df.values
 le = LabelEncoder()
 y = le.fit_transform(label_df)
