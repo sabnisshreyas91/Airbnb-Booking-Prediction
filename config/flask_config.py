@@ -1,6 +1,6 @@
-DEBUG = True
+DEBUG = False
 LOGGING_CONFIG = "config/logging/local.conf"
-PORT = 5000
+PORT = 3000
 APP_NAME = "airbnb-booking-prediction"
 SQLALCHEMY_DATABASE_URI = 'sqlite:///../database/msia423.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False

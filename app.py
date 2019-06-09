@@ -14,9 +14,11 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 # Initialize the Flask application
 app = Flask(__name__,template_folder='app/templates/')
+app.config.from_pyfile(os.path.join('config','flask_config.py'))
 
 logger = logging.getLogger(__name__)
 # Use pickle to load in the pre-trained model.
