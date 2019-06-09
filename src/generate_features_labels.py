@@ -5,7 +5,7 @@ import pandas as pd
 import config
 import argparse
 import numpy as np
-from helpers.helpers import read_csv_from_s3, write_csv_to_s3
+from helpers.helpers import read_csv_from_s3, write_csv_to_s3, read_array_from_s3, write_array_to_s3
 from io import StringIO
 import boto3
 

@@ -2,6 +2,7 @@ import traceback
 from flask import render_template, request, redirect, url_for
 import logging.config
 import src.config as config
+from src.helpers.helpers import read_csv_from_s3, read_array_from_s3
 # from app.models import Tracks
 from flask import Flask
 import pickle
@@ -9,6 +10,8 @@ import boto3
 import argparse
 from io import BytesIO
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
 
 # Initialize the Flask application
 app = Flask(__name__,template_folder='app/templates/')
@@ -41,15 +44,47 @@ def index():
     if flask.request.method == 'GET':
         return(flask.render_template('index.html'))
     if flask.request.method == 'POST':
-        gender = flask.request.form['gender']
-        signupmethod = flask.request.form['signupmethod']
-        language = flask.request.form['language']
-        affiliatechannel = flask.request.form['affiliatechannel']
-        input_variables = pd.DataFrame([[gender,age,signupmethod,language,affiliatechannel]],
-                                       columns=['gender','age','signupmethod','language','affiliatechannel'],
-                                       dtype=float)
-        print(input_variables)
 
+        gender_resp = flask.request.form['gender']
+        signupmethod_resp = flask.request.form['signupmethod']
+        language_resp = flask.request.form['language']
+        affiliatechannel_resp = flask.request.form['affiliatechannel']
+
+        gender = 'gender_'+gender_resp
+        signupmethod = 'signup_method_'+signupmethod_resp
+        language = 'language_'+language_resp
+        affiliatechannel = 'affiliate_channel_' +affiliatechannel_resp
+
+        feature_mode = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.MODE_FEATURES_FILE_NAME)
+        training_data = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.TRAIN_FEATURE_FILE, nrows=1)
+        labels = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.LABEL_FILE_NAME)
+        le = LabelEncoder()
+        y = le.fit_transform(labels)
+
+        input_variables = pd.DataFrame([[gender, signupmethod, language, affiliatechannel]],columns=['gender', 'signupmethod', 'language', 'affiliatechannel'])
+
+        upd_col_lst = [gender, signupmethod, language, affiliatechannel]
+        for upd_col in upd_col_lst:
+            try:
+                feature_mode[upd_col]=1
+            except:
+                logger.warning("column %s does not exist in training data, ignoring update", upd_col)
+        
+        prediction = model.predict_proba(feature_mode[list(training_data)].values)
+        y_pred_names = []
+        for i in range(len(prediction)):
+            y_pred_names.append(list(le.inverse_transform(np.argsort(prediction[i])[::-1])[:2]))
+        print(y_pred_names)
+        pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
+
+        return flask.render_template('index.html',
+                                        original_input={'Gender':gender_resp,
+                                                        'signupmethod':signupmethod_resp,
+                                                        'language':language_resp,
+                                                        'affiliatechannel':affiliatechannel_resp
+                                                        },
+                                        result=pred_val
+                                        )
 
 if __name__ == '__main__':
     app.run()

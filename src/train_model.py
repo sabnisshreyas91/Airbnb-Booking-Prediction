@@ -15,7 +15,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
 
 import config
-from helpers.helpers import read_csv_from_s3
+from helpers.helpers import read_csv_from_s3, read_array_from_s3
 
 log_file_path = config.LOGGING_CONFIG#"../"+config.LOGGING_CONFIG
 logging.config.fileConfig(log_file_path)
@@ -37,10 +37,6 @@ logger.info("Read %s from bucket %s", X_train_fname, args.bucket_name)
 y_train = read_csv_from_s3(args.bucket_name, args.bucket_folder, y_train_fname)
 logger.info("Read %s from bucket %s", y_train_fname, args.bucket_name)
 
-le = LabelEncoder()
-y = le.fit_transform(y_train)
-logger.debug("Encoded labels for training")
-
 xgb = XGBClassifier(max_depth=config.XG_MAX_DEPTH
                    ,learning_rate=config.XG_LEARNING_RATE
                    ,n_estimators=config.XG_N_ESTIMATORS
@@ -52,7 +48,7 @@ xgb = XGBClassifier(max_depth=config.XG_MAX_DEPTH
 logger.debug("Initialized model")
 
 logger.info("Started model training")
-xgb.fit(X_train, y_train, verbose=config.XG_FIT_VERBOSITY)
+xgb.fit(X_train.values, y_train.values, verbose=config.XG_FIT_VERBOSITY)
 logger.info("Model training complete")
 pickle_buffer = io.BytesIO()
 s3_resource = boto3.resource('s3')

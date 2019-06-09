@@ -10,7 +10,7 @@ from numpy import loadtxt
 
 
 import config
-from helpers.helpers import read_csv_from_s3, write_csv_to_s3
+from helpers.helpers import read_csv_from_s3, write_csv_to_s3, read_array_from_s3, write_array_to_s3
 
 
 log_file_path = config.LOGGING_CONFIG#"../"+config.LOGGING_CONFIG
@@ -37,11 +37,11 @@ y = le.fit_transform(label_df)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=config.TEST_SIZE, random_state=config.SPLIT_RANDOM_STATE)
 logger.info("split training features and labels into %.1f train and %.1f test", (1-config.TEST_SIZE), config.TEST_SIZE)
 
-write_csv_to_s3(X_train, args.bucket_name, args.bucket_folder, 'X_train.csv', arr=True)
+write_csv_to_s3(pd.DataFrame(X_train,columns = list(feature_df)), args.bucket_name, args.bucket_folder, config.TRAIN_FEATURE_FILE)
 logger.info("wrote training features to %s", config.FEATURE_FOLDER + config.TRAIN_FEATURE_FILE)
-write_csv_to_s3(X_test, args.bucket_name, args.bucket_folder, 'X_test.csv', arr=True)
+write_csv_to_s3(pd.DataFrame(X_test,columns=list(feature_df)), args.bucket_name, args.bucket_folder,  config.TEST_FEATURE_FILE)
 logger.info("wrote testing features to %s", config.FEATURE_FOLDER + config.TEST_FEATURE_FILE)
-write_csv_to_s3(y_train, args.bucket_name, args.bucket_folder, 'y_train.csv', arr=True)
+write_csv_to_s3(pd.DataFrame(y_train, columns=list(label_df)), args.bucket_name, args.bucket_folder,  config.TRAIN_LABEL_FILE)
 logger.info("wrote training labels to %s", config.FEATURE_FOLDER + config.TRAIN_LABEL_FILE)
-write_csv_to_s3(y_test, args.bucket_name, args.bucket_folder, 'y_test.csv', arr=True)
+write_csv_to_s3(pd.DataFrame(y_test, columns=list(label_df)), args.bucket_name, args.bucket_folder, config.TEST_LABEL_FILE)
 logger.info("wrote testing labels to %s", config.FEATURE_FOLDER + config.TEST_LABEL_FILE)

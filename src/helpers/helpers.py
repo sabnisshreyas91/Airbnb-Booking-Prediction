@@ -56,19 +56,38 @@ def format_sql(sql, replace_sqlvar=None, replace_var=None, python=True):
     return sql
 
 
-def read_csv_from_s3(bucket_name, bucket_folder, file_name):
+def read_csv_from_s3(bucket_name, bucket_folder, file_name, nrows=-1):
     client = boto3.client('s3')
     obj = client.get_object(Bucket=bucket_name, Key=bucket_folder+file_name)
-    df = pd.read_csv(obj['Body'])
+    if nrows==-1:
+        df = pd.read_csv(obj['Body'])
+    else:
+        df = pd.read_csv(obj['Body'],nrows=nrows)
     return df
 
+def read_array_from_s3(bucket_name, bucket_folder, file_name):
+    client = boto3.client('s3')
+    obj = client.get_object(Bucket=bucket_name, Key=bucket_folder+file_name)
+    arr = np.genfromtxt(obj['Body'], delimiter = ",")
+    return arr
 
-def write_csv_to_s3(df, bucket_name, bucket_folder, file_name, arr=False):
+def write_csv_to_s3(df, bucket_name, bucket_folder, file_name):
     csv_buffer = StringIO()
-    if(arr == False):
-        df.to_csv(csv_buffer, index=False)
-    else:
-        np.savetxt(csv_buffer, df , delimiter=",")
+    # if(arr == False):
+    df.to_csv(csv_buffer, index=False)
+    # else:
+    #     np.savetxt(csv_buffer, df , delimiter=",")
     s3_resource = boto3.resource('s3')
     fq_feature_fname = bucket_folder+file_name
     s3_resource.Object(bucket_name, fq_feature_fname).put(Body=csv_buffer.getvalue())
+
+
+def write_array_to_s3(arr, bucket_name, bucket_folder, file_name):
+    np_buffer = StringIO()
+    # if(arr == False):
+    #df.to_csv(csv_buffer, index=False)
+    # else:
+    np.savetxt(np_buffer, arr, delimiter = ",")
+    s3_resource = boto3.resource('s3')
+    fq_feature_fname = bucket_folder+file_name
+    s3_resource.Object(bucket_name, fq_feature_fname).put(Body=np_buffer.getvalue())

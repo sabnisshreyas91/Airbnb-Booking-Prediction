@@ -41,5 +41,16 @@ form {
         <input type="submit">
     </fieldset>
 </form>
+<br>
+<div class="result" align="center">
+    {% if result %}
+        {% for variable, value in original_input.items() %}
+            <b>{{ variable }}</b> : {{ value }} <br>
+        {% endfor %}
+        <br>
+        <br> Top 2 predicted foreign destinations for user:
+           <p style="font-size:50px">{{ result }}</p>
+    {% endif %}
+</div>
 </body>
 </html>
