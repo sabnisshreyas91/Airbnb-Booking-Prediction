@@ -91,7 +91,7 @@ def index():
                                                         'language':language_resp,
                                                         'affiliatechannel':affiliatechannel_resp
                                                         },
-                                        result=pred_val, genders = genders, signup_method = signupmethod, languages = languages, affiliate_channels = affiliate_channels 
+                                        result=pred_val, genders = genders, signup_methods = signup_methods, languages = languages, affiliate_channels = affiliate_channels 
                                         )
 
 if __name__ == '__main__':
