@@ -110,31 +110,32 @@ def userid():
     if flask.request.method == 'POST':
 
         userid = flask.request.form['userid']
-        print(userid)
+        #print(userid)
         data_point = feature_df.loc[feature_df.userid== userid, list(training_data)]
-        print(data_point)
+        #print(data_point)
         prediction = model.predict_proba(data_point.values)
-        print('prediction ',prediction)
-
-
-        gender_resp = train_users.loc[train_users.id==userid,'gender'].values[0]
-        signupmethod_resp = train_users.loc[train_users.id==userid,'signup_method'].values[0]
-        language_resp = train_users.loc[train_users.id==userid,'language'].values[0]
-        affiliate_channel_resp = train_users.loc[train_users.id==userid,'affiliate_channel'].values[0]
+        #print('prediction ',prediction)
         y_pred_names = []
         for i in range(len(prediction)):
             y_pred_names.append(list(le.inverse_transform(np.argsort(prediction[i])[::-1])[:2]))
-        print(y_pred_names)
-        pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
+        #print(y_pred_names)
 
-        return flask.render_template('userid.html',
-                                        original_input={'Gender':gender_resp,
-                                                        'signupmethod':signupmethod_resp,
-                                                        'language':language_resp,
-                                                        'affiliatechannel':affiliate_channel_resp
-                                                        },
-                                        result=pred_val
-                                        )
+        if len(y_pred_names)>0:
+            gender_resp = train_users.loc[train_users.id==userid,'gender'].values[0]
+            signupmethod_resp = train_users.loc[train_users.id==userid,'signup_method'].values[0]
+            language_resp = train_users.loc[train_users.id==userid,'language'].values[0]
+            affiliate_channel_resp = train_users.loc[train_users.id==userid,'affiliate_channel'].values[0]
+            pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
+            return flask.render_template('userid.html',
+                                            original_input={'Gender':gender_resp,
+                                                            'signupmethod':signupmethod_resp,
+                                                            'language':language_resp,
+                                                            'affiliatechannel':affiliate_channel_resp
+                                                            },
+                                            result=pred_val
+                                            )
+        else:
+            return flask.render_template('error.html')
 
 
 if __name__ == '__main__':
