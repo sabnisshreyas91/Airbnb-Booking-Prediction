@@ -6,10 +6,26 @@ form {
     width: 35%;
 }
 .result {
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
     width: 35%;
     border: 1px solid #ccc;
 }
+table, td, th {  
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 20px;}
+}
+
+table {
+  border-collapse: collapse;
+  width: 750;
+}
+
+th, td {
+  padding: 15px;
+}
+
 </style>
 <head>
     <meta charset="UTF-8">
@@ -68,8 +84,21 @@ form {
             <b>{{ variable }}</b> : {{ value }} <br>
         {% endfor %}
         <br>
-        <br> Top 2 predicted foreign destinations for user:
-           <p style="font-size:50px">{{ result }}</p>
+        <br> Top 2 predicted foreign destinations and predicted probabilities for user :
+        <br>
+        <br>
+        <table>
+        <tr>    
+        {% for value in result_tbl %}
+            <td align = "center", >{{ value }}</td>
+        {% endfor %}
+        </tr>
+        <tr>
+        {% for value in probs %}
+            <td align = "center">{{ value }}</td>
+        {% endfor %}
+        </tr>
+        </table>
     {% endif %}
 </div>
 </body>

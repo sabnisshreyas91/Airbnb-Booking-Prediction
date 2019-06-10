@@ -6,10 +6,42 @@ form {
     width: 35%;
 }
 .result {
-    margin: auto;
     width: 35%;
     border: 1px solid #ccc;
+    margin-right: auto;
+    margin-left: auto;
 }
+.tables {
+  width: 750;
+}
+td, th {  
+  border: 1px solid #ddd;
+  text-align: center;
+  }
+}
+table.table2 {
+  font-size:20px;
+  border: 1px solid #ddd;
+}
+table.table1{
+    font-size:15px;
+    border: 1px solid #ddd;
+}
+
+table {
+  border-collapse: collapse;
+  width: 750;
+}
+
+th, td {
+  padding: 15px;
+}
+
+.user_list {
+  float: left;
+  margin-top:0px;
+}
+
 </style>
 <head>
     <meta charset="UTF-8">
@@ -38,15 +70,42 @@ form {
     </fieldset>
 </form>
 <br>
+<div class="tables">
+<div class="user_list" >
+    <table class="table1">
+        <tr>
+        <td align = 'center' style="font-weight:bold">Valid Userid's to try</td>
+        </tr>
+        {% for value in user_lst %}
+            <tr>
+            <td align='center' font-size=10px>{{value}}</td>
+            </tr>
+        {% endfor %}
+     </table>
+</div>
 <div class="result" align="center">
-    {% if result %}
+     {% if result %}
         {% for variable, value in original_input.items() %}
             <b>{{ variable }}</b> : {{ value }} <br>
         {% endfor %}
         <br>
-        <br> Top 2 predicted foreign destinations for user:
-           <p style="font-size:50px">{{ result }}</p>
+        <br> Top 2 predicted foreign destinations and predicted probabilities for user :
+        <br>
+        <br>
+        <table class="table2">
+        <tr>    
+        {% for value in result_tbl %}
+            <td align = "center", >{{ value }}</td>
+        {% endfor %}
+        </tr>
+        <tr>
+        {% for value in probs %}
+            <td align = "center">{{ value }}</td>
+        {% endfor %}
+        </tr>
+        </table>
     {% endif %}
 </div>
+<div class="clear"></div>
 </body>
 </html>

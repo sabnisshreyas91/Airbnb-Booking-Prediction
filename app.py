@@ -21,7 +21,7 @@ app = Flask(__name__,template_folder='app/templates/')
 app.config.from_pyfile(os.path.join('config','flask_config.py'))
 
 logger = logging.getLogger(__name__)
-# Use pickle to load in the pre-trained model.
+# Use pickle to load in the pre-trained modeldd
 
 s3 = boto3.resource('s3')
 parser = argparse.ArgumentParser()
@@ -34,6 +34,8 @@ signup_methods = list(df_train.signup_method.unique())
 languages = list(df_train.language.unique())
 affiliate_channels = list(df_train.affiliate_channel.unique())
 
+#sds
+country_map = read_csv_from_s3(args.bucket_name, config.DEFAULT_BUCKET_FOLDER, config.COUNTRY_MAP)
 feature_mode = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.MODE_FEATURES_FILE_NAME)
 training_data = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.TRAIN_FEATURE_FILE)
 feature_df = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.FEATURE_FILE_NAME)
@@ -41,10 +43,15 @@ train_users = read_csv_from_s3(args.bucket_name, config.DEFAULT_BUCKET_FOLDER, c
 labels = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.LABEL_FILE_NAME)
 le = LabelEncoder()
 y = le.fit_transform(labels)
+user_list = list(feature_df.head(config.NUM_USER_ID_TO_DISPLAY)['userid'])
+
+
+def get_country_name(country_map, country):
+    return country_map.loc[country_map.Code == country,'Name'].values[0]
 
 with BytesIO() as data:
     s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
-    data.seek(0)    # move back to the beginning after writing
+    data.seek(0)    # move back to the beginniaaang aftezsassxdsssr writing
     model = pickle.load(data)
 
 @app.route('/', methods=['GET','POST'])
@@ -83,17 +90,25 @@ def index():
         
         prediction = model.predict_proba(feature_mode[list(training_data)].values)
         y_pred_names = []
+        y_pred_prob = []
         for i in range(len(prediction)):
             y_pred_names.append(list(le.inverse_transform(np.argsort(prediction[i])[::-1])[:2]))
+            a =prediction[i].tolist()
+            a.sort(reverse=True)
+            a=a[:2]
+            a = [round(x,2) for x in a]
+            y_pred_prob.append(a)
+            #sdssds
+        pred_val_tbl = [get_country_name(country_map,y_pred_names[0][0]),get_country_name(country_map,y_pred_names[0][1])]
         pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
-
+        
         return flask.render_template('index.html',
                                         original_input={'Gender':gender_resp,
                                                         'signupmethod':signupmethod_resp,
                                                         'language':language_resp,
                                                         'affiliatechannel':affiliatechannel_resp
                                                         },
-                                        result=pred_val, genders = genders, signup_methods = signup_methods, languages = languages, affiliate_channels = affiliate_channels 
+                                       result = pred_val, result_tbl=pred_val_tbl, probs=y_pred_prob[0] , genders = genders, signup_methods = signup_methods, languages = languages, affiliate_channels = affiliate_channels 
                                         )
 @app.route('/userid', methods=['GET','POST'])
 def userid():
@@ -106,7 +121,7 @@ def userid():
 
     """
     if flask.request.method == 'GET':
-        return(flask.render_template('userid.html',))
+        return(flask.render_template('userid.html',user_lst = user_list))
     if flask.request.method == 'POST':
 
         userid = flask.request.form['userid']
@@ -116,15 +131,22 @@ def userid():
         prediction = model.predict_proba(data_point.values)
         #print('prediction ',prediction)
         y_pred_names = []
+        y_pred_prob = []
         for i in range(len(prediction)):
             y_pred_names.append(list(le.inverse_transform(np.argsort(prediction[i])[::-1])[:2]))
-        #print(y_pred_names)
+            #y_pred_prob.append(list(np.argsort(prediction[i])[::-1])[:2])
+            a =prediction[i].tolist()
+            a.sort(reverse=True)
+            a=a[:2]
+            a = [round(x,2) for x in a]
+            y_pred_prob.append(a)
 
         if len(y_pred_names)>0:
             gender_resp = train_users.loc[train_users.id==userid,'gender'].values[0]
             signupmethod_resp = train_users.loc[train_users.id==userid,'signup_method'].values[0]
             language_resp = train_users.loc[train_users.id==userid,'language'].values[0]
             affiliate_channel_resp = train_users.loc[train_users.id==userid,'affiliate_channel'].values[0]
+            pred_val_tbl = [get_country_name(country_map,y_pred_names[0][0]),get_country_name(country_map,y_pred_names[0][1])]
             pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
             return flask.render_template('userid.html',
                                             original_input={'Gender':gender_resp,
@@ -132,7 +154,7 @@ def userid():
                                                             'language':language_resp,
                                                             'affiliatechannel':affiliate_channel_resp
                                                             },
-                                            result=pred_val
+                                            result = pred_val ,result_tbl=pred_val_tbl, probs=y_pred_prob[0], user_lst = user_list
                                             )
         else:
             return flask.render_template('error.html')
