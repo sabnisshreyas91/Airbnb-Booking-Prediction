@@ -191,18 +191,5 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
         logger.info("\ngenerating schema for '%s' database in sqlite\n",databasename)
         engine = sql.create_engine(sqlite_uri)
         create_db(engine_string=sqlite_uri)
-
-    # class UserInput(Base):
-    #     """Create a data model to store any user inputs to the app """
-    #     __tablename__ = 'User_Input'
-    #     id = Column(Integer, primary_key=True)
-    #     Age = Column(Integer, unique=False, nullable=False)
-    #     Gender = Column(String(100), unique=False, nullable=False)
-    #     SignupMethod = Column(String(100), unique=False, nullable=False)
-    #     Language = Column(String(100), unique=False, nullable=False)
-    #     DateAccountCreated = Column(Date, unique=False, nullable=False)
-
-    # def __repr__(self):
-    #     return '<UserInput %r>' % self.title
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

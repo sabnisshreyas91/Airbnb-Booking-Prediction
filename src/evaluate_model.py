@@ -42,11 +42,14 @@ y = le.fit_transform(labels)
 logger.info("read test feature file %s and test label file %s from bucket %s and folder %s",X_test_fname, y_test_fname, args.bucket_name, args.bucket_folder)
 
 s3 = boto3.resource('s3')
-with BytesIO() as data:
-    s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
-    data.seek(0)    # move back to the beginniaaang aftezsassxdsssr writing
-    model = pickle.load(data)
-logger.info("Loaded saved model %s from bucket %s",config.MODEL_S3_LOCATION , args.bucket_name)
+try:
+    with BytesIO() as data:
+        s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
+        data.seek(0)    # move back to the beginniaaang aftezsassxdsssr writing
+        model = pickle.load(data)
+    logger.info("Loaded saved model %s from bucket %s",config.MODEL_S3_LOCATION , args.bucket_name)
+except FileNotFoundError as e:
+			logger.error('No saved model found! %s'e)
 
 prediction = model.predict_proba(X_test.values)
 y_pred_names = []

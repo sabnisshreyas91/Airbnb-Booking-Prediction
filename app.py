@@ -38,7 +38,6 @@ signup_methods = list(df_train.signup_method.unique())
 languages = list(df_train.language.unique())
 affiliate_channels = list(df_train.affiliate_channel.unique())
 
-#sds
 country_map = read_csv_from_s3(args.bucket_name, config.DEFAULT_BUCKET_FOLDER, config.COUNTRY_MAP)
 feature_mode = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.MODE_FEATURES_FILE_NAME)
 training_data = read_csv_from_s3(args.bucket_name, config.FEATURE_FOLDER, config.TRAIN_FEATURE_FILE)
@@ -53,10 +52,13 @@ user_list = list(feature_df.head(config.NUM_USER_ID_TO_DISPLAY)['userid'])
 def get_country_name(country_map, country):
     return country_map.loc[country_map.Code == country,'Name'].values[0]
 
-with BytesIO() as data:
-    s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
-    data.seek(0)    # move back to the beginniaaang aftezsassxdsssr writing
-    model = pickle.load(data)
+try:
+    with BytesIO() as data:
+        s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
+        data.seek(0)    # move back to the beginnig after writing
+        model = pickle.load(data)
+except FileNotFoundError as e:
+			logger.error('No saved model found! %s',e)
 
 @app.route('/', methods=['GET','POST'])
 def index():
