@@ -102,7 +102,6 @@ def index():
             a=a[:2]
             a = [round(x,2) for x in a]
             y_pred_prob.append(a)
-            #sdssds
         pred_val_tbl = [get_country_name(country_map,y_pred_names[0][0]),get_country_name(country_map,y_pred_names[0][1])]
         pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
 
