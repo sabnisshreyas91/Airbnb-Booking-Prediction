@@ -9,6 +9,7 @@ a configurable target S3 bucket.
 """
 import logging.config
 import src.config as config
+import config.flask_config as flask_config
 import os
 import argparse
 #from app import app
@@ -34,14 +35,14 @@ parser.add_argument("--bucket_folder", default= bucket_folder, help="Folder with
 parser.add_argument("--app", default= 'F', help="Folder within S3 bucket where wd'd like the data to be uploaded. Default:Input/")
 args = parser.parse_args()
 
-user = os.environ.get("MYSQL_USER")
-password = os.environ.get("MYSQL_PASSWORD")
-host = config.RDS_HOST
-port = config.RDS_PORT
-databasename = config.MYSQL_DB
+user = flask_config.USER#os.environ.get("MYSQL_USER")
+password = flask_config.PASSWORD#os.environ.get("MYSQL_PASSWORD")
+host = flask_config.RDS_HOST
+port = flask_config.RDS_PORT
+databasename = flask_config.MYSQL_DB
 # Indicator to decide if RDBMS schema should be created in local sqlite vs AWS RDS
-rds_flag = config.RDS_FLAG
-sqlite_uri = config.SQLITE_DATABASE_URI
+rds_flag = flask_config.RDS_FLAG
+sqlite_uri = flask_config.SQLALCHEMY_DATABASE_URI
 logger.debug("Finished imports and reading in configs")
 
 

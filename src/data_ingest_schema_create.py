@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
-
 class UserInput(Base):
     """Create a data model to store any user inputs to the app """
     __tablename__ = 'User_Input'
