@@ -11,7 +11,7 @@ import logging.config
 import src.config as config
 import os
 import argparse
-from app import app
+#from app import app
 #logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logging.config.fileConfig(config.LOGGING_CONFIG)
 logger = logging.getLogger(__name__)

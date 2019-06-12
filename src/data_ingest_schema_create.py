@@ -27,7 +27,6 @@ class UserInput(Base):
     Language = Column(String(100), unique=False, nullable=False)
     AffiliateChannel = Column(String(100), unique=False, nullable=False)
 
-
 def __repr__(self):
     return '<UserInput %r>' % self.title
 
@@ -206,5 +205,5 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
 
     # def __repr__(self):
     #     return '<UserInput %r>' % self.title
-        
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

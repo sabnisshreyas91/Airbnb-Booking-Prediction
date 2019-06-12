@@ -15,10 +15,14 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 from flask_sqlalchemy import SQLAlchemy
 import os
+from src.data_ingest_schema_create import UserInput
 
 # Initialize the Flask application
 app = Flask(__name__,template_folder='app/templates/')
 app.config.from_pyfile(os.path.join('config','flask_config.py'))
+
+# Initialize the database
+db = SQLAlchemy(app)
 
 logger = logging.getLogger(__name__)
 # Use pickle to load in the pre-trained modeldd
@@ -101,6 +105,21 @@ def index():
             #sdssds
         pred_val_tbl = [get_country_name(country_map,y_pred_names[0][0]),get_country_name(country_map,y_pred_names[0][1])]
         pred_val = y_pred_names[0][0]+","+y_pred_names[0][1]
+
+        if(app.config['RDS_FLAG']=="T"):
+            logger.debug("Adding new record to database in AWS RDS.")
+        else:
+            logger.debug("Adding new record to the local SQLite database.")
+            
+        new_entry = UserInput(
+            Gender = gender_resp
+            ,SignupMethod = signupmethod_resp
+            ,Language = language_resp
+            ,AffiliateChannel = affiliatechannel_resp)
+
+        db.session.add(new_entry)
+        db.session.commit()
+        logger.debug("New record added to the database")            
         
         return flask.render_template('index.html',
                                         original_input={'Gender':gender_resp,
@@ -110,6 +129,8 @@ def index():
                                                         },
                                        result = pred_val, result_tbl=pred_val_tbl, probs=y_pred_prob[0] , genders = genders, signup_methods = signup_methods, languages = languages, affiliate_channels = affiliate_channels 
                                         )
+
+
 @app.route('/userid', methods=['GET','POST'])
 def userid():
     """Main view that lists songs in the database.
