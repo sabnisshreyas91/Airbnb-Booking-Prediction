@@ -13,6 +13,8 @@ ___
     * [1) Set up the environment](#1-set-up-the-environment)
     * [2) Set up configurations](#2-set-up-configurations)
     * [3) Upload data and setup database schema](#3-upload-data-and-setup-database-schema)
+    * [4) Train, Evaluate model & Run app](#4-train-evaluate-model-&-run-app)
+    * [5) Testing](#5-testing)
 
 <!-- tocstop -->
 
@@ -160,7 +162,7 @@ This command will, as described above:
 1) Upload the source data to your target S3 bucket
 2) Setup the database schema either in local sqlite or AWS RDS
 
-### 4) Train & Evaluate model. Run app.
+### 4) Train, Evaluate model & Run app.
 `make all`
 This command will, as described above:
 
@@ -170,6 +172,19 @@ This command will, as described above:
 4) Evaluate the model and save model details and evaluation metrics
 5) Run the app
 
+Alternatively, to perform each step individually:
+
+1) Read in the raw data to generate features and labels
+    `python src/generate_features_labels.py`
+2) Split up the features and labels into train/test
+    `python src/generate_train_test_split.py`
+3) Train the model using the training data
+    `python src/train_model.py`
+4) Evaluate the model and save model details and evaluation metrics
+    `python src/evaluate_model.py`
+5) Run the app
+    `python app.py`
+	
 ### 5) Testing.
 `pytest unit_test.py`
 

@@ -1,7 +1,13 @@
 import pandas as pd
 import numpy as np
-import os
+from os import path
+import sys
+
+rel_path = path.dirname(path.dirname(path.abspath(__file__)))
+sys.path.append(rel_path)
+
 from src.generate_features_labels import get_session_features
+
 
 
 test_case1_inp = pd.DataFrame({'user_id':['1','1','1','1','1'],'col1': ['a', 'a', 'b', 'b','b']})
