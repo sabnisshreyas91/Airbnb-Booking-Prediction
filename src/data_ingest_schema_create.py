@@ -10,10 +10,24 @@ from zipfile import BadZipfile
 import sqlalchemy as sql
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy import Column, Integer, String, MetaData, Date
 from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
+
+Base = declarative_base()
+
+class UserInput(Base):
+    """Create a data model to store any user inputs to the app """
+    __tablename__ = 'User_Input'
+    id = Column(Integer, primary_key=True)
+    Gender = Column(String(100), unique=False, nullable=False)
+    SignupMethod = Column(String(100), unique=False, nullable=False)
+    Language = Column(String(100), unique=False, nullable=False)
+    AffiliateChannel = Column(String(100), unique=False, nullable=False)
+
+def __repr__(self):
+    return '<UserInput %r>' % self.title
 
 
 def download_source_zip(src_bucket_name, zip_file_name, destination_path):
@@ -126,14 +140,11 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
     else:
         logger.info("\nUploading to destination bucket %s\n",bucket_name)
         for file in file_lst:
-            if file == 'sessions.csv':
-                continue
-            else:
-                fq_local_file_path = uncompressed_folder_path+file
-                logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
-                bucket_path = bucket_folder+file
-                upload_file(fq_local_file_path, bucket_name, bucket_path)
-                logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
+            fq_local_file_path = uncompressed_folder_path+file
+            logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
+            bucket_path = bucket_folder+file
+            upload_file(fq_local_file_path, bucket_name, bucket_path)
+            logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
 
 
 def create_db(engine=None, engine_string=None):
@@ -167,7 +178,7 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
         :param sqlite_uri: local path where the sqlite database should be created
         :rds_flag: T-> create schema in RDS instance. F-> create schema in local sqlite database.
     """
-    Base = declarative_base()
+    
     if rds_flag == 'T':
         logger.info("\ngenerating schema for '%s' database in AWS RDS\n", databasename)
         conn_type = "mysql+pymysql"
@@ -177,16 +188,5 @@ def create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag
         logger.info("\ngenerating schema for '%s' database in sqlite\n",databasename)
         engine = sql.create_engine(sqlite_uri)
         create_db(engine_string=sqlite_uri)
-
-    class UserInput(Base):
-        """Create a data model to store any user inputs to the app """
-        __tablename__ = 'User_Input'
-        id = Column(Integer, primary_key=True)
-        age = Column(Integer, unique=False, nullable=False)
-        Gender = Column(String(100), unique=False, nullable=False)
-        Preffered_Destination = Column(String(100), unique=False, nullable=True)
-
-    def __repr__(self):
-        return '<UserInput %r>' % self.title
-        
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

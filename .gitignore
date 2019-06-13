@@ -23,6 +23,7 @@ test/test/*
 # ipython notebooks
 #*.ipynb
 .ipynb_checkpoints/
+notebooks/develop/*
 
 # C extensions
 *.so
@@ -114,3 +115,6 @@ ENV/
 .DS_Store
 */.DS_Store
 */.idea
+
+# logs
+logs/*.log
