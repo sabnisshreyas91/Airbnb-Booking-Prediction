@@ -117,4 +117,4 @@ ENV/
 */.idea
 
 # logs
-logs/*
+logs/*.log
