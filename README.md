@@ -74,21 +74,11 @@ best performing model.
 5. *Model Development . Model selection and parameter tuning* (8)
 6. *Model Development . Model Evaluation* (2)
 7. *Model Development . Model performance test* (4)
+8. *RDS . Schema and interaction scripts* (4)
+8. *Flask . Form, front-end and interaction of app with database* (8)
+9. *EC2 . Deployment, testing and persistence of app* (8)
 
 ### Icebox
-
-* **Set up S3 instance**:
-This will be used to store the pickled model that will be used for making
-predictions on user-input data.
-
-* **Initialize RDS database**:
-The RDS will be used to store cleansed training data in order to perform
-the initial training of the best performing model. The trained model will be
-pickled and stored in the S3 instance and used for all future predictions.
-
-* **Deploy model using Flask**:
-Write scripts to train the model using data stored in RDS, obtain user inputs
-to feed as model data inputs and display model output.
 
 * **User interface enhancement**:
 Add captivating images and other cosmetic elements to front-end.
@@ -154,6 +144,7 @@ Once step i) or ii) have been completed, verify the below configurations are set
 
 ### 3) Upload data and setup database schema
 `python run.py --bucket_name=<bucket_name> --bucket_folder=<bucket_folder>`
+
 (replace <bucket_name> and <bucket_folder> with the name of your AWS bucket and folder names. if no either one of them are not specified, the default values
 as in the config.py file will be taken)
 
@@ -164,6 +155,7 @@ This command will, as described above:
 
 ### 4) Train, Evaluate model & Run app.
 `make all`
+
 This command will, as described above:
 
 1) Read in the raw data to generate features and labels
@@ -175,14 +167,19 @@ This command will, as described above:
 Alternatively, to perform each step individually:
 
 1) Read in the raw data to generate features and labels
+    
     `python src/generate_features_labels.py`
 2) Split up the features and labels into train/test
+   
     `python src/generate_train_test_split.py`
 3) Train the model using the training data
+   
     `python src/train_model.py`
 4) Evaluate the model and save model details and evaluation metrics
+   
     `python src/evaluate_model.py`
 5) Run the app
+   
     `python app.py`
 	
 ### 5) Testing.
