@@ -12,7 +12,7 @@ import boto3
 from io import BytesIO, StringIO
 
 import config
-from helpers.helpers import read_csv_from_s3, read_array_from_s3, write_csv_to_s3
+from helpers.helpers import read_csv_from_s3, write_csv_to_s3,load_saved_model
 
 
 log_file_path = config.LOGGING_CONFIG#"../"+config.LOGGING_CONFIG
@@ -43,13 +43,10 @@ logger.info("read test feature file %s and test label file %s from bucket %s and
 
 s3 = boto3.resource('s3')
 try:
-    with BytesIO() as data:
-        s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
-        data.seek(0)    # move back to the beginniaaang aftezsassxdsssr writing
-        model = pickle.load(data)
+    model = load_saved_model(args.bucket_name, config.MODEL_S3_LOCATION)
     logger.info("Loaded saved model %s from bucket %s",config.MODEL_S3_LOCATION , args.bucket_name)
 except FileNotFoundError as e:
-			logger.error('No saved model found! %s'e)
+			logger.error('No saved model found! %s',e)
 
 prediction = model.predict_proba(X_test.values)
 y_pred_names = []
@@ -75,7 +72,7 @@ write_string= 'model: '+str(model)+'\n'
 write_string+='test file: '+y_test_fname+'\n'
 write_string+='features used: '+str(config.TRAIN_CATEGORICAL_COLUMNS+config.SESSIONS_FEATURE_COLUMNS)
 write_string+='\nAccuracy on test:' + str(top_2_accuracy)
-print(write_string)
+logger.info(write_string)
 
 output = StringIO()
 output.write(write_string)

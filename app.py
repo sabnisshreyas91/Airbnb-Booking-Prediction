@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for
 import flask
 import logging.config
 import src.config as config
-from src.helpers.helpers import read_csv_from_s3, read_array_from_s3
+from src.helpers.helpers import read_csv_from_s3,load_saved_model
 # from app.models import Tracks
 from flask import Flask
 import pickle
@@ -52,11 +52,11 @@ user_list = list(feature_df.head(config.NUM_USER_ID_TO_DISPLAY)['userid'])
 def get_country_name(country_map, country):
     return country_map.loc[country_map.Code == country,'Name'].values[0]
 
+
+s3 = boto3.resource('s3')
 try:
-    with BytesIO() as data:
-        s3.Bucket(args.bucket_name).download_fileobj(config.MODEL_S3_LOCATION, data)
-        data.seek(0)    # move back to the beginnig after writing
-        model = pickle.load(data)
+    model = load_saved_model(args.bucket_name, config.MODEL_S3_LOCATION)
+    logger.info("Loaded saved model %s from bucket %s",config.MODEL_S3_LOCATION , args.bucket_name)
 except FileNotFoundError as e:
 			logger.error('No saved model found! %s',e)
 

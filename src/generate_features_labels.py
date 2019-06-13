@@ -5,7 +5,7 @@ import pandas as pd
 import config
 import argparse
 import numpy as np
-from helpers.helpers import read_csv_from_s3, write_csv_to_s3, read_array_from_s3, write_array_to_s3
+from helpers.helpers import read_csv_from_s3, write_csv_to_s3
 from io import StringIO
 import boto3
 
@@ -27,6 +27,16 @@ args = parser.parse_args()
 
 
 def get_session_features(df, column):
+    """
+    Given a dataframe and a column with categorical values, return a pivoted dataframe with each individual
+    categorical value as a column
+
+    :param df: Dataframe containing categorical columns
+    :param column: column belonging to df that we want to group-by and pivot
+
+    :return: Dataframe with each categorical value of the column as a new column.
+    """
+
     df['count'] = 1
     ret_df = df[['user_id', column, 'count']].fillna(-1)\
                                              .groupby(['user_id', column])\
@@ -42,9 +52,8 @@ logger.info("Reading %s from bucket %s", session_data, args.bucket_name)
 df_sess = read_csv_from_s3(args.bucket_name, args.bucket_folder, session_data)
 logger.info("Read %s from bucket %s", session_data, args.bucket_name)
 
-
-df_train = df_train[(df_train.country_destination!='NDF') & (df_train.country_destination!='other') & ((df_train.country_destination!='US'))]
-logger.info("Filtered NDF, other, and US data from training data")
+df_train = df_train[(~df_train.country_destination.isin(config.TRAINING_FILTER_CRIT)).to_list()]
+logger.info("Filtered ", str(config.TRAINING_FILTER_CRIT),"data from training data")
 df_train_user_id = df_train[['id']]
 df_sess = df_sess.merge(df_train_user_id, how='inner', left_on='user_id', right_on='id')
 logger.info("Filtered sessions to only include user_id's that exist in training data")

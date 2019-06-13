@@ -13,6 +13,7 @@ SESSION_DATA = 'sessions.csv'
 SESSIONS_FEATURE_COLUMNS = ['action', 'action_type', 'action_detail', 'device_type']
 TRAIN_CATEGORICAL_COLUMNS = ['gender','signup_method','language','affiliate_channel','affiliate_provider','first_affiliate_tracked','signup_app','first_device_type','first_browser']
 USER_INPUT_COLUMNS = ['gender','signup_method','language','affiliate_channel']
+TRAINING_FILTER_CRIT = ['NDF','other','US']
 ZIP_FILE_NAME = "AirBnb.zip"
 DATA_SOURCE_BUCKET_NAME = "nw-shreyassabnis-msia423-public"
 DEFAULT_BUCKET_NAME = "nw-shreyassabnis-msia423"

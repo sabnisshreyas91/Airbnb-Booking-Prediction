@@ -31,12 +31,11 @@ bucket_folder = config.DEFAULT_BUCKET_FOLDER
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--bucket_name", default= bucket_name, help="S3 bucket to upload the source data to. Default:nw-shreyassabnis-msia423")
-parser.add_argument("--bucket_folder", default= bucket_folder, help="Folder within S3 bucket where wd'd like the data to be uploaded. Default:Input/")
 parser.add_argument("--app", default= 'F', help="Folder within S3 bucket where wd'd like the data to be uploaded. Default:Input/")
 args = parser.parse_args()
 
-user = flask_config.USER#os.environ.get("MYSQL_USER")
-password = flask_config.PASSWORD#os.environ.get("MYSQL_PASSWORD")
+user = flask_config.USER
+password = flask_config.PASSWORD
 host = flask_config.RDS_HOST
 port = flask_config.RDS_PORT
 databasename = flask_config.MYSQL_DB
@@ -57,8 +56,6 @@ uncompressed_folder_path = data_folder_path+uncompressed_data
 if __name__ == '__main__':
     download_source_zip(src_bucket_name, zip_file_name, destination_path)
     unzip_file(uncompressed_folder_path, zip_file_name, zip_file_path )
-    load_data_to_S3(uncompressed_folder_path, args.bucket_name, args.bucket_folder)
+    load_data_to_S3(uncompressed_folder_path, args.bucket_name, bucket_folder)
     create_schema(user, password, host, port, databasename, sqlite_uri, rds_flag)
-    # if(args.app == 'T'):
-    #     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
 

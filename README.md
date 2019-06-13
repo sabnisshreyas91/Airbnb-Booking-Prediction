@@ -65,13 +65,13 @@ best performing model.
 
 ### Backlog
 
-1. *Model Development . Data Cleansing* (2) - PLANNED
-2. *Model Development . Exploratory Data Analysis* (4) - PLANNED
-3. *Model Development . Outlier detection and Management* (2) - PLANNED
-4. *Model Development . Feature Engineering* (8) - PLANNED
+1. *Model Development . Data Cleansing* (2)
+2. *Model Development . Exploratory Data Analysis* (4)
+3. *Model Development . Outlier detection and Management* (2)
+4. *Model Development . Feature Engineering* (8)
 5. *Model Development . Model selection and parameter tuning* (8)
 6. *Model Development . Model Evaluation* (2)
-7. *Model Development . Model performance and Reproducibility tests* (4)
+7. *Model Development . Model performance test* (4)
 
 ### Icebox
 
@@ -151,11 +151,26 @@ Once step i) or ii) have been completed, verify the below configurations are set
 - RDS_PORT -> The port number associated with your RDS instance
 
 ### 3) Upload data and setup database schema
-`python run.py`
+`python run.py --bucket_name=<bucket_name> --bucket_folder=<bucket_folder>`
+(replace <bucket_name> and <bucket_folder> with the name of your AWS bucket and folder names. if no either one of them are not specified, the default values
+as in the config.py file will be taken)
 
 This command will, as described above:
 
 1) Upload the source data to your target S3 bucket
 2) Setup the database schema either in local sqlite or AWS RDS
 
-(For midproject PR)
+### 4) Train & Evaluate model. Run app.
+`make all`
+This command will, as described above:
+
+1) Read in the raw data to generate features and labels
+2) Split up the features and labels into train/test
+3) Train the model using the training data
+4) Evaluate the model and save model details and evaluation metrics
+5) Run the app
+
+### 5) Testing.
+`pytest unit_test.py`
+
+this will run the unit test for functions

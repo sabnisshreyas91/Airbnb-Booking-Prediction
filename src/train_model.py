@@ -17,7 +17,7 @@ from sklearn.model_selection import cross_val_score
 import config
 from helpers.helpers import read_csv_from_s3, read_array_from_s3
 
-log_file_path = config.LOGGING_CONFIG#"../"+config.LOGGING_CONFIG
+log_file_path = config.LOGGING_CONFIG
 logging.config.fileConfig(log_file_path)
 
 logger = logging.getLogger(__name__)
