@@ -140,14 +140,11 @@ def load_data_to_S3(uncompressed_folder_path, bucket_name, bucket_folder):
     else:
         logger.info("\nUploading to destination bucket %s\n",bucket_name)
         for file in file_lst:
-            if file=='sessions.csv':
-                continue
-            else:
-                fq_local_file_path = uncompressed_folder_path+file
-                logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
-                bucket_path = bucket_folder+file
-                upload_file(fq_local_file_path, bucket_name, bucket_path)
-                logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
+            fq_local_file_path = uncompressed_folder_path+file
+            logger.info("Uploading file %s to bucket %s", fq_local_file_path, bucket_name)
+            bucket_path = bucket_folder+file
+            upload_file(fq_local_file_path, bucket_name, bucket_path)
+            logger.info("Uploaded file %s to bucket %s", fq_local_file_path, bucket_name)
 
 
 def create_db(engine=None, engine_string=None):
